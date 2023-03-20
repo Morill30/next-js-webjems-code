@@ -52,7 +52,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
 
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full md:translate-x-0"
+        className="fixed top-0 left-0 z-40 md:z-0 w-64 h-screen transition-transform -translate-x-full md:translate-x-0"
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
@@ -112,7 +112,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
                   <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
-                <span className="ml-3">Site Diagram</span>
+                <span className="ml-3">Articles &amp; Diagrams</span>
               </Link>
             </li>
             <li>
