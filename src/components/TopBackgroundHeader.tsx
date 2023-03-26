@@ -9,7 +9,7 @@ export default function TopBackgroundHeader() {
       <div className="block text-white bg-slate-900 w-full h-28 md:h-56 relative rounded-b-lg overflow-hidden">
         <Image
           className="relative object-cover transform transition duration-500 hover:scale-110 blur-sm"
-          src={"/auroral-forest.jpeg"}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/auroral-forest.jpeg`}
           fill
           style={{ objectFit: "cover" }}
           alt="Background image"

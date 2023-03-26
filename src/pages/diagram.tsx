@@ -22,7 +22,7 @@ export default function Diagram() {
           <div className=" w-full h-40 bg-gray-50  flex-shrink-0 relative">
             <Image
               className="object-cover w-5 rounded-md"
-              src={"/aws-diagram.png"}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/aws-diagram.png`}
               fill
               style={{ objectFit: "contain" }}
               alt="Background image"

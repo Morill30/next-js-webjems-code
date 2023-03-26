@@ -38,7 +38,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
         </button>
         <a href="https://webjems.com" className="flex items-center pr-4">
           <Image
-            src="/webjems-logo.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
             height={28}
             width={33}
             className="h-6 mr-3 sm:h-7"
@@ -58,7 +58,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
           <a href="https://webjems.com" className="flex items-center mb-5">
             <Image
-              src="/webjems-logo.png"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
               height={28}
               width={33}
               className="h-6 mr-3 sm:h-7"
