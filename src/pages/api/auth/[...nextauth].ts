@@ -8,27 +8,34 @@ const options = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
-  database: process.env.NEXT_PUBLIC_DATABASE_URL,
-  session: {
-    jwt: true,
-  },
+  session: { strategy: "jwt" },
+
   callbacks: {
-    session: async (session: any, user: any) => {
-      session.jwt = user.jwt;
-      session.id = user.id;
-      return Promise.resolve(session);
+    async session({ session, token }: { session: any; token: any }) {
+      session.jwt = token.jwt;
+      session.id = token.id;
+      return session;
     },
-    jwt: async (token: any, user: any, account: any) => {
+
+    async jwt({
+      token,
+      user,
+      account,
+    }: {
+      user: any;
+      token: any;
+      account: any;
+    }) {
       const isSignIn = user ? true : false;
       if (isSignIn) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/${account.provider}/callback?access_token=${account?.accessToken}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/${account?.provider}/callback?access_token=${account?.access_token}`
         );
         const data = await response.json();
         token.jwt = data.jwt;
         token.id = data.user.id;
       }
-      return Promise.resolve(token);
+      return token;
     },
   },
 } as any;
