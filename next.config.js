@@ -3,7 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
   images: {
-    domains: ["webjems.com"],
+    domains: [
+      "webjems.com",
+      "webjems-strapi-assets.s3.amazonaws.com",
+      "cms.webjems.com",
+      "www.webjems.com",
+    ],
   },
 };
 
