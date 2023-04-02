@@ -1,9 +1,12 @@
 import { createRef, ReactElement, useRef } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Icons from "@/styles/icons/Icons";
 import Link from "next/link";
 import Footer from "./Footer";
+
 export default function SideBar({ children }: { children: ReactElement }) {
+  const { data: session } = useSession();
   const button = createRef<HTMLButtonElement>();
   const handleClick = () => {
     if (button.current && window.innerWidth < 768) {
@@ -69,6 +72,35 @@ export default function SideBar({ children }: { children: ReactElement }) {
             </span>
           </a>
           <ul className="space-y-2">
+            {!session ? (
+              <>
+                <button
+                  onClick={() => signIn()}
+                  className="flex mx-1 my-2 mb-10 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2"
+                >
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+                    height={28}
+                    width={33}
+                    className="h-6 mr-3 sm:h-7"
+                    alt="Flowbite Logo"
+                  />
+                  <span> Sign in with Google </span>
+                </button>
+              </>
+            ) : (
+              <div className="flex items-center pl-1 mb-10">
+                <div className=" rounded-full overflow-hidden h-8 w-8">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={session?.user?.image || ""}
+                    alt="user image"
+                    className=" object-cover"
+                  />
+                </div>
+                <span className="pl-2"> {session?.user?.name}</span>
+              </div>
+            )}
             <li>
               <Link
                 onClick={handleClick}
@@ -99,7 +131,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
             <li>
               <Link
                 onClick={handleClick}
-                href="/diagram"
+                href="/articles"
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -112,7 +144,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
                   <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
-                <span className="ml-3">Articles &amp; Diagrams</span>
+                <span className="ml-3">Articles</span>
               </Link>
             </li>
             <li>
@@ -201,6 +233,21 @@ export default function SideBar({ children }: { children: ReactElement }) {
               </a>
             </li>
           </ul>
+          {session && (
+            <button
+              onClick={() => signOut()}
+              className="flex mx-1 my-2 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2 mb-2"
+            >
+              <Image
+                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+                height={28}
+                width={33}
+                className="h-6 mr-3 sm:h-7"
+                alt="Flowbite Logo"
+              />
+              <span className=" ml-5"> Sign out </span>
+            </button>
+          )}
         </div>
       </aside>
       <div className="p-4 md:ml-64">
