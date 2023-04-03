@@ -1,6 +1,5 @@
 import TopBackgroundHeader from "@/components/TopBackgroundHeader";
 import Image from "next/image";
-import Icons from "@/styles/icons/Icons";
 import FsLightbox from "fslightbox-react";
 import { useEffect, useState } from "react";
 
@@ -17,9 +16,7 @@ export default function Article({ post }: { post: any }) {
           <div className="flex flex-col sm:flex-row sm:justify-between my-2 md:my-6 text-sm md:text-md">
             <span>Author: {post.data.attributes.Author}</span>
             <span>
-              {new Date(post.data.attributes.publishedAt).toLocaleDateString(
-                "en-US"
-              )}
+              {new Date(post.data.attributes.publishedAt).toLocaleString()}
             </span>
           </div>
           <div className="flex flex-col items-center mb-6">
