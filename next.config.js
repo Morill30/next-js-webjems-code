@@ -8,6 +8,7 @@ const nextConfig = {
       "webjems-strapi-assets.s3.amazonaws.com",
       "cms.webjems.com",
       "www.webjems.com",
+      "lh3.googleusercontent.com",
     ],
   },
 };

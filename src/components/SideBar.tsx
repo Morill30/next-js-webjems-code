@@ -58,7 +58,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
         className="fixed top-0 left-0 z-40 md:z-0 w-64 h-screen transition-transform -translate-x-full md:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto overflow-x-hidden bg-gray-50 dark:bg-gray-800">
           <a href="https://webjems.com" className="flex items-center mb-5">
             <Image
               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
@@ -91,9 +91,10 @@ export default function SideBar({ children }: { children: ReactElement }) {
             ) : (
               <div className="flex items-center pl-1 mb-10">
                 <div className=" rounded-full overflow-hidden h-8 w-8">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={session?.user?.image || ""}
+                    width={33}
+                    height={33}
                     alt="user image"
                     className=" object-cover"
                   />
@@ -214,7 +215,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
           {session && (
             <button
               onClick={() => signOut()}
-              className="flex mx-1 my-2 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2 mb-2"
+              className="flex mx-1 my-2 mt-7 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2 mb-2"
             >
               <Image
                 src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
