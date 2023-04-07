@@ -1,9 +1,19 @@
 import TopBackgroundHeader from "@/components/TopBackgroundHeader";
 import Image from "next/image";
 import FsLightbox from "fslightbox-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Likes from "@/components/Likes";
+import { getServerSession } from "next-auth/next";
+import { options, Session } from "../api/auth/[...nextauth]";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default function Article({ post }: { post: any }) {
+export default function Article({
+  post,
+  session,
+}: {
+  post: any;
+  session: Session;
+}) {
   const [toggler, setToggler] = useState(false);
   return (
     <main className={`relative flex flex-col items-center`}>
@@ -67,6 +77,16 @@ export default function Article({ post }: { post: any }) {
                 __html: post.data.attributes.AIExplain,
               }}
             />
+            <div className=" flex items-center mt-10 flex-col md:flex-row">
+              <span className=" text-lg font-semibold text-gray-700 mr-5">
+                Please dont forget to like
+              </span>
+
+              <Likes
+                user_likes={post.data.attributes.user_likes}
+                session={session}
+              />
+            </div>
           </div>
 
           <FsLightbox
@@ -82,7 +102,16 @@ export default function Article({ post }: { post: any }) {
 }
 
 // Triggered on each request
-export async function getServerSideProps({ params }: { params: any }) {
+export async function getServerSideProps({
+  params,
+  req,
+  res,
+}: {
+  params: any;
+  req: NextApiRequest;
+  res: NextApiResponse;
+}) {
+  const session = await getServerSession(req, res, options);
   try {
     // Fetching data from an API
     const res = await fetch(
@@ -94,9 +123,9 @@ export async function getServerSideProps({ params }: { params: any }) {
       }
     );
     const post = await res.json();
-    return { props: { post } };
+    return { props: { post, session } };
   } catch (e) {
     console.log("api call not available");
-    return { props: { post: null } };
+    return { props: { post: null, session } };
   }
 }
