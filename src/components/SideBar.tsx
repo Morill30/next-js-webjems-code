@@ -15,14 +15,26 @@ export default function SideBar({ children }: { children: ReactElement }) {
   };
   return (
     <>
-      <div className="flex items-center justify-between md:hidden">
+      <div className="flex items-center justify-between md:hidden bg-white z-10 w-full">
+        <a href="https://webjems.com" className="flex items-center px-4">
+          <Image
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+            height={28}
+            width={33}
+            className="h-6 mr-3 sm:h-7"
+            alt="Flowbite Logo"
+          />
+          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            WebJems
+          </span>
+        </a>
         <button
           data-drawer-target="logo-sidebar"
           data-drawer-toggle="logo-sidebar"
           aria-controls="logo-sidebar"
           type="button"
           ref={button}
-          className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="inline-flex items-center p-2 my-2 mx-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
         >
           <span className="sr-only">Open sidebar</span>
           <svg
@@ -39,18 +51,6 @@ export default function SideBar({ children }: { children: ReactElement }) {
             ></path>
           </svg>
         </button>
-        <a href="https://webjems.com" className="flex items-center pr-4">
-          <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
-            height={28}
-            width={33}
-            className="h-6 mr-3 sm:h-7"
-            alt="Flowbite Logo"
-          />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-            WebJems
-          </span>
-        </a>
       </div>
 
       <aside

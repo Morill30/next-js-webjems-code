@@ -5,7 +5,12 @@ import Link from "next/link";
 import Likes from "@/components/Likes";
 import { getServerSession } from "next-auth/next";
 import { options } from "../api/auth/[...nextauth]";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+const plus_Jakarta_Sans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+});
 
 export default function Articles({
   posts,
@@ -16,13 +21,37 @@ export default function Articles({
 }) {
   return (
     <main className={`relative flex flex-col`}>
-      <TopBackgroundHeader />
-      <div className=" -mt-16 z-10">
-        <div className="flex justify-center md:justify-start">
-          <h2 className=" md:ml-10 mb-10 font-thin tracking-wide text-md text-white flex items-center justify-center bg-cyan-900 px-10 py-4 rounded-md text-center shadow-lg">
+      <div className=" z-10">
+        <div className="flex flex-col justify-center md:justify-start ml-10 my-5">
+          <h2
+            className={` font-bold m-0 tracking-wide text-5xl flex items-center ${plus_Jakarta_Sans.className}`}
+          >
             Articles
           </h2>
+          <span className="text-gray-600 ">Latest articles from Jean</span>
+
+          <div className={`${plus_Jakarta_Sans.className} mt-10 mb-4 `}>
+            <ul
+              className="flex flex-wrap -mb-px text-sm font-medium text-center"
+              role="tablist"
+            >
+              <li className="mr-2" role="presentation">
+                <button
+                  className="inline-block p-4 border-b-2 rounded-t-lg hover:text-blue-400"
+                  id="profile-tab"
+                  data-tabs-target="#profile"
+                  type="button"
+                  role="tab"
+                  aria-controls="profile"
+                  aria-selected="false"
+                >
+                  All Articles
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
+
         {posts ? (
           posts.data.map((post: any, index: number) => (
             <React.Fragment key={index + "-postsx"}>
