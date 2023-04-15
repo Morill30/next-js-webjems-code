@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import type { Session } from "next-auth/core/types";
+import { Session } from "next-auth/core/types";
 
 export interface SessionWeb extends Session {
   jwt?: string;
