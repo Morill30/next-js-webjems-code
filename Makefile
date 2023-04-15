@@ -26,3 +26,5 @@ deploy-next:
 
 ecs-deploy:
 	@aws ecs update-service --cluster Personal-Website-Cluster --service personal-site-service --force-new-deployment
+
+# aws ecs update-service --service my-service --task-definition my-task:v2
