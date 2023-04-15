@@ -16,13 +16,16 @@
     "eslint-config-next": "13.2.1",
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",
+    "fslightbox-react": "^1.7.2",
     "next": "13.2.1",
+    "next-auth": "^4.20.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-multi-carousel": "^2.8.2",
     "typescript": "4.9.5"
   },
   "devDependencies": {
+    "@types/fslightbox-react": "^1.7.0",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",

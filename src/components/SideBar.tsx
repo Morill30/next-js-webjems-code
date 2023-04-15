@@ -1,9 +1,12 @@
 import { createRef, ReactElement, useRef } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Icons from "@/styles/icons/Icons";
 import Link from "next/link";
 import Footer from "./Footer";
+
 export default function SideBar({ children }: { children: ReactElement }) {
+  const { data: session } = useSession();
   const button = createRef<HTMLButtonElement>();
   const handleClick = () => {
     if (button.current && window.innerWidth < 768) {
@@ -12,14 +15,26 @@ export default function SideBar({ children }: { children: ReactElement }) {
   };
   return (
     <>
-      <div className="flex items-center justify-between md:hidden">
+      <div className="flex items-center justify-between md:hidden bg-white z-10 w-full">
+        <a href="https://webjems.com" className="flex items-center px-4">
+          <Image
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+            height={28}
+            width={33}
+            className="h-6 mr-3 sm:h-7"
+            alt="Flowbite Logo"
+          />
+          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            WebJems
+          </span>
+        </a>
         <button
           data-drawer-target="logo-sidebar"
           data-drawer-toggle="logo-sidebar"
           aria-controls="logo-sidebar"
           type="button"
           ref={button}
-          className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="inline-flex items-center p-2 my-2 mx-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
         >
           <span className="sr-only">Open sidebar</span>
           <svg
@@ -36,29 +51,17 @@ export default function SideBar({ children }: { children: ReactElement }) {
             ></path>
           </svg>
         </button>
-        <a href="https://webjems.com" className="flex items-center pr-4">
-          <Image
-            src="/webjems-logo.png"
-            height={28}
-            width={33}
-            className="h-6 mr-3 sm:h-7"
-            alt="Flowbite Logo"
-          />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-            WebJems
-          </span>
-        </a>
       </div>
 
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full md:translate-x-0"
+        className="fixed top-0 left-0 z-40 md:z-0 w-64 h-screen transition-transform -translate-x-full md:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto overflow-x-hidden bg-gray-50 dark:bg-gray-800">
           <a href="https://webjems.com" className="flex items-center mb-5">
             <Image
-              src="/webjems-logo.png"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
               height={28}
               width={33}
               className="h-6 mr-3 sm:h-7"
@@ -69,6 +72,36 @@ export default function SideBar({ children }: { children: ReactElement }) {
             </span>
           </a>
           <ul className="space-y-2">
+            {!session ? (
+              <>
+                <button
+                  onClick={() => signIn("google")}
+                  className="flex mx-1 my-2 mb-10 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2"
+                >
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+                    height={28}
+                    width={33}
+                    className="h-6 mr-3 sm:h-7"
+                    alt="Flowbite Logo"
+                  />
+                  <span> Sign in with Google </span>
+                </button>
+              </>
+            ) : (
+              <div className="flex items-center pl-1 mb-10">
+                <div className=" rounded-full overflow-hidden h-8 w-8">
+                  <Image
+                    src={session?.user?.image || ""}
+                    width={33}
+                    height={33}
+                    alt="user image"
+                    className=" object-cover"
+                  />
+                </div>
+                <span className="pl-2"> {session?.user?.name}</span>
+              </div>
+            )}
             <li>
               <Link
                 onClick={handleClick}
@@ -99,7 +132,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
             <li>
               <Link
                 onClick={handleClick}
-                href="/diagram"
+                href="/articles"
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -112,7 +145,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
                   <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
-                <span className="ml-3">Site Diagram</span>
+                <span className="ml-3">Articles</span>
               </Link>
             </li>
             <li>
@@ -162,32 +195,10 @@ export default function SideBar({ children }: { children: ReactElement }) {
                 </span>
               </a>
             </li>
-            <li>
-              <a
-                href="https://www.amazon.com/Razer-Blade-16-Gaming-Laptop/dp/B0BSRJ3SQ3/ref=sr_1_5?crid=26ZSZHSG0D45A&keywords=razer+blade&qid=1677817800&s=electronics&sprefix=razer+blad%2Celectronics%2C123&sr=1-5&ufe=app_do%3Aamzn1.fos.17f26c18-b61b-4ce9-8a28-de351f41cffb"
-                target="_blank"
-                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Products</span>
-              </a>
-            </li>
 
             <li>
               <a
-                href="#"
+                href="https://github.com/Morill30"
                 type="button"
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
@@ -201,6 +212,21 @@ export default function SideBar({ children }: { children: ReactElement }) {
               </a>
             </li>
           </ul>
+          {session && (
+            <button
+              onClick={() => signOut()}
+              className="flex mx-1 my-2 mt-7 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2 mb-2"
+            >
+              <Image
+                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+                height={28}
+                width={33}
+                className="h-6 mr-3 sm:h-7"
+                alt="Flowbite Logo"
+              />
+              <span className=" ml-5"> Sign out </span>
+            </button>
+          )}
         </div>
       </aside>
       <div className="p-4 md:ml-64">

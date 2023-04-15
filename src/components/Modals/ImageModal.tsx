@@ -1,7 +1,13 @@
 import { ReactElement, useEffect, useState } from "react";
 import Image from "next/image";
 
-export default function ImageModal({ children }: { children: ReactElement }) {
+export default function ImageModal({
+  imageURL,
+  children,
+}: {
+  imageURL: string;
+  children: ReactElement;
+}) {
   const [show, setShow] = useState(false);
   return (
     <>
@@ -15,7 +21,7 @@ export default function ImageModal({ children }: { children: ReactElement }) {
           <div className="max-w-[500px] w-full h-full max-h-[50%] md:max-h-[40%] relative rounded-md shadow-md flex-shrink-0 -mt-20">
             <Image
               className="object-cover w-5 rounded-md cursor-pointer"
-              src={"/jean-avatar.jpeg"}
+              src={imageURL}
               fill
               style={{ objectFit: "cover", objectPosition: "center" }}
               alt="Background image"

@@ -44,7 +44,7 @@ export default function SummaryCard() {
           >
             <div className="relative h-[25px] w-[20px] self-center sm:my-0 rounded-full">
               <Image
-                src="/poly-logo.png"
+                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/poly-logo.png`}
                 fill
                 style={{ objectFit: "contain" }}
                 className="relative rounded-full"

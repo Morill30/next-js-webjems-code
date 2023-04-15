@@ -1,4 +1,4 @@
-# WebJems - Jean's Personal Website
+# [WebJems](https://webjems.com) - Jean's Personal Website
 
 This site is to showcase my experience and contact information.
 
@@ -44,3 +44,8 @@ docker compose up
 ```
 
 The server will start a nginx container in port 80 and 443 with a domain of `local.jmprofile.com`
+
+## ECS Fargate Setup
+
+![image](https://user-images.githubusercontent.com/55332150/223022818-6ef820e0-c730-40d7-b2da-1f0c3db0234c.png)
+

@@ -5,6 +5,7 @@ import Layout from "../components/layout";
 import Script from "next/script";
 import { useEffect } from "react";
 import * as ga from "@/utils/googleAnalytics/ga";
+import { SessionProvider } from "next-auth/react";
 import "flowbite";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -54,9 +55,11 @@ export default function App({ Component, pageProps }: AppProps) {
           });
         `}
       </Script>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <SessionProvider session={pageProps.session}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SessionProvider>
     </>
   );
 }
