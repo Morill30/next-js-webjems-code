@@ -3,17 +3,8 @@ import Image from "next/image";
 import FsLightbox from "fslightbox-react";
 import { useState } from "react";
 import Likes from "@/components/Likes";
-import { getServerSession } from "next-auth/next";
-import { options, Session } from "../api/auth/[...nextauth]";
-import type { NextApiRequest, NextApiResponse } from "next";
 
-export default function Article({
-  post,
-  session,
-}: {
-  post: any;
-  session: Session;
-}) {
+export default function Article({ post }: { post: any }) {
   const [toggler, setToggler] = useState(false);
   return (
     <main className={`relative flex flex-col items-center`}>
@@ -82,10 +73,7 @@ export default function Article({
                 Please dont forget to like
               </span>
 
-              <Likes
-                user_likes={post.data.attributes.user_likes}
-                session={session}
-              />
+              <Likes user_likes={post.data.attributes.user_likes} />
             </div>
           </div>
 
@@ -102,16 +90,7 @@ export default function Article({
 }
 
 // Triggered on each request
-export async function getServerSideProps({
-  params,
-  req,
-  res,
-}: {
-  params: any;
-  req: NextApiRequest;
-  res: NextApiResponse;
-}) {
-  const session = await getServerSession(req, res, options);
+export async function getServerSideProps({ params }: { params: any }) {
   try {
     // Fetching data from an API
     const res = await fetch(
@@ -123,9 +102,9 @@ export async function getServerSideProps({
       }
     );
     const post = await res.json();
-    return { props: { post, session } };
+    return { props: { post } };
   } catch (e) {
     console.log("api call not available");
-    return { props: { post: null, session } };
+    return { props: { post: null } };
   }
 }

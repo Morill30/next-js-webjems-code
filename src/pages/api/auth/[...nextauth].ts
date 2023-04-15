@@ -1,12 +1,11 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import type { Session } from "next-auth/core/types";
 
-export type Session = {
-  user: object;
-  expires: string;
-  jwt: string;
-  id: number;
-};
+export interface SessionWeb extends Session {
+  jwt?: string;
+  id?: number;
+}
 
 export const options = {
   providers: [
@@ -18,7 +17,7 @@ export const options = {
   session: { strategy: "jwt" },
 
   callbacks: {
-    async session({ session, token }: { session: Session; token: any }) {
+    async session({ session, token }: { session: SessionWeb; token: any }) {
       session.jwt = token.jwt;
       session.id = token.id;
       return session;

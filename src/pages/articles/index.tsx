@@ -1,6 +1,5 @@
-import TopBackgroundHeader from "@/components/TopBackgroundHeader";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import Likes from "@/components/Likes";
 import { getServerSession } from "next-auth/next";
@@ -12,16 +11,10 @@ const plus_Jakarta_Sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
-export default function Articles({
-  posts,
-  session,
-}: {
-  posts: any;
-  session: any;
-}) {
+export default function Articles({ posts }: { posts: any }) {
   return (
     <main className={`relative flex flex-col`}>
-      <div className=" z-10">
+      <div>
         <div className="flex flex-col justify-center md:justify-start ml-10 my-5">
           <h2
             className={` font-bold m-0 tracking-wide text-5xl flex items-center ${plus_Jakarta_Sans.className}`}
@@ -78,10 +71,7 @@ export default function Articles({
                     </span>
                   </div>
 
-                  <Likes
-                    user_likes={post.attributes.user_likes}
-                    session={session}
-                  />
+                  <Likes user_likes={post.attributes.user_likes} />
 
                   <div
                     className="pb-3"

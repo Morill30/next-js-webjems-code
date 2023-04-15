@@ -1,22 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./Modals/Modal";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
+import { useSession } from "next-auth/react";
 
 type UserLikes = {
   data: Object[];
 };
 
-export default function Likes({
-  user_likes,
-  session,
-}: {
-  user_likes: UserLikes;
-  session: any;
-}) {
-  const [like, setLike] = useState(hasUserLiked());
+type SessionData = {
+  data: SessionWeb | null;
+  status: string;
+};
+
+export default function Likes({ user_likes }: { user_likes: UserLikes }) {
+  const { data: session, status }: SessionData = useSession();
+  const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(user_likes.data.length);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (status !== "loading") {
+      setLike(hasUserLiked());
+    }
+  }, [status]);
 
   function hasUserLiked() {
     const userHasLiked = user_likes.data.find(
@@ -26,14 +34,17 @@ export default function Likes({
   }
 
   async function syncLike() {
+    if (status === "loading") {
+      return;
+    }
+
     if (like) {
       // remove like
-
       setLikeCount(likeCount - 1);
       setLike(false);
       await fetch("/api/likes?postId=2&disconnect");
     } else {
-      if (session) {
+      if (status === "authenticated") {
         setLikeCount(likeCount + 1);
         setLike(true);
         await fetch("/api/likes?postId=2");

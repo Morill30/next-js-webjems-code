@@ -15,8 +15,8 @@ export default function SideBar({ children }: { children: ReactElement }) {
   };
   return (
     <>
-      <div className="flex items-center justify-between md:hidden bg-white z-10 w-full">
-        <a href="https://webjems.com" className="flex items-center px-4">
+      <div className="flex items-center justify-between md:hidden bg-white z-10 w-full sticky top-0 z-50">
+        <Link href="/" className="flex items-center px-4">
           <Image
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
             height={28}
@@ -27,7 +27,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
           <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
             WebJems
           </span>
-        </a>
+        </Link>
         <button
           data-drawer-target="logo-sidebar"
           data-drawer-toggle="logo-sidebar"
@@ -59,7 +59,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto overflow-x-hidden bg-gray-50 dark:bg-gray-800">
-          <a href="https://webjems.com" className="flex items-center mb-5">
+          <Link href="/" className="flex items-center mb-5">
             <Image
               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
               height={28}
@@ -70,7 +70,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
               WebJems
             </span>
-          </a>
+          </Link>
           <ul className="space-y-2">
             {!session ? (
               <>
