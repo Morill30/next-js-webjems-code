@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { options, Session } from "./auth/[...nextauth]";
+import { options, SessionWeb } from "./auth/[...nextauth]";
 
 type Data = {
   message: string;
@@ -11,7 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const session: Session | null = await getServerSession(req, res, options);
+  const session: SessionWeb | null = await getServerSession(req, res, options);
   function connectionParam() {
     if (req.query.disconnect !== undefined) {
       return { disconnect: [session?.id] };
@@ -58,5 +58,4 @@ export default async function handler(
         "You must be sign in to view the protected content on this page.",
     });
   }
-  // res.status(200).json({ name: 'John Doe' })
 }
