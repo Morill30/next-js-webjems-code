@@ -18,7 +18,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
       <div className="flex items-center justify-between md:hidden bg-white z-10 w-full sticky top-0 z-50">
         <Link href="/" className="flex items-center px-4">
           <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/images/webjems-logo.png`}
             height={28}
             width={33}
             className="h-6 mr-3 sm:h-7"
@@ -61,7 +61,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
         <div className="h-full px-3 py-4 overflow-y-auto overflow-x-hidden bg-gray-50 dark:bg-gray-800">
           <Link href="/" className="flex items-center mb-5">
             <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/images/webjems-logo.png`}
               height={28}
               width={33}
               className="h-6 mr-3 sm:h-7"
@@ -79,7 +79,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
                   className="flex mx-1 my-2 mb-10 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2"
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/images/webjems-logo.png`}
                     height={28}
                     width={33}
                     className="h-6 mr-3 sm:h-7"
@@ -218,7 +218,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
               className="flex mx-1 my-2 mt-7 w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-2 mb-2"
             >
               <Image
-                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/webjems-logo.png`}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/images/webjems-logo.png`}
                 height={28}
                 width={33}
                 className="h-6 mr-3 sm:h-7"

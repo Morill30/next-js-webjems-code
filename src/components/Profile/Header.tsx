@@ -9,11 +9,13 @@ export default function ProfileHeader() {
       <TopBackgroundHeader />
       <div className="w-full flex flex-col xl:flex-row max-[377px]:-mt-7 -mt-16 md:-mt-28 md:pl-16 max-w-[1300px]">
         <div className="flex flex-row items-end">
-          <ImageModal imageURL={"/jean-avatar.jpeg"}>
+          <ImageModal
+            imageURL={`${process.env.NEXT_PUBLIC_IMAGE_URL}/images/orange_jean_pic.jpg`}
+          >
             <div className="max-[377px]:w-20 max-[377px]:h-20 bg-white w-32 h-32 md:w-56 md:h-56 relative rounded-full border-4 border-white shadow-md flex-shrink-0">
               <Image
                 className="red object-cover w-5 rounded-full cursor-pointer"
-                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/jean-avatar.jpeg`}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/images/orange_jean_pic.jpg`}
                 fill
                 style={{ objectFit: "cover" }}
                 alt="Background image"
