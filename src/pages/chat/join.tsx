@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import socket from "socket.io-client";
+import { socket } from "@/config/web-socket";
 import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 
@@ -8,93 +8,158 @@ type SessionData = {
   status: string;
 };
 
-type welcomeMessage = {
-  user: string;
+type MessageData = {
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
   message: string;
+  userId?: number;
 };
 
-export default function ChatRoom({ username = "jemorillo", id = 1 }) {
-  const { data: session, status }: SessionData = useSession();
-  const [messages, setMessages] = useState<any[]>([]);
-  const [message, setMessage] = useState("");
-  const [users, setUsers] = useState([]);
-  const io = socket("http://localhost"); //Connecting to Socket.io backend
-  let welcome: welcomeMessage;
-  useEffect(() => {
-    io.emit("join", { username }, (error: string) => {
-      //Sending the username to the backend as the user connects.
-      if (error) return alert(error);
-    });
-    io.on("welcome", async (data, error) => {
-      //Getting the welcome message from the backend
-      let welcomeMessage = {
-        user: data.user,
-        message: data.text,
-      };
-      welcome = welcomeMessage;
-      console.log("hello", welcome, welcomeMessage);
-      setMessages([welcomeMessage]); //Storing the Welcome Message
-      console.log(messages);
-      await fetch("http://localhost/api/messages") //Fetching all messages from Strapi
-        .then(async (res) => {
-          const response = await res.json();
-          let arr: any = [welcome];
-          response.data.map((one: any, i: number) => {
-            arr = [...arr, one.attributes];
-            setMessages([...arr]); // Storing all Messages in a state variable
-          });
-        })
-        .catch((e) => console.log(e.message));
-    });
-    console.log("wow");
-    io.on("message", async (data, error) => {
-      //Listening for a message connection
-      console.log("message", data);
-      //   await fetch("http://localhost/api/messages")
-      //     .then(async (res) => {
-      //       const response = await res.json();
-      //       let arr = [welcome];
-      //       response.data.map((one, i: number) => {
-      //         arr = [...arr, one.attributes];
-      //         setMessages((msgs) => arr);
-      //       });
-      //     })
-      //     .catch((e) => console.log(e.message));
-    });
-  }, [username]);
+type ReactInputEvent = React.ChangeEvent<HTMLInputElement> & {
+  key: any;
+};
 
-  const sendMessage = (message: string) => {
+export default function ChatRoom() {
+  const { data: session, status }: SessionData = useSession();
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [messages, setMessages] = useState<MessageData[]>([]);
+  const [message, setMessage] = useState("");
+
+  async function onWelcome(data: MessageData, error: string): Promise<any> {
+    //Getting the welcome message from the backend
+    setMessages([data]); //Storing the Welcome Message
+    // await fetch("http://localhost/api/messages") //Fetching all messages from Strapi
+    //   .then(async (res) => {
+    //     const response = await res.json();
+    //     let arr: any = [welcome];
+    //     response.data.map((one: any, i: number) => {
+    //       arr = [...arr, one.attributes];
+    //       setMessages([...arr]); // Storing all Messages in a state variable
+    //     });
+    //   })
+    //   .catch((e) => console.log(e.message));
+  }
+
+  function onMessage(data: MessageData, error: string): any {
+    //Listening for a message connection
+    console.log("chat", [...messages, data]);
+    console.log("uno chat", messages, data);
+    setMessages((prev) => [...prev, data]);
+    //   await fetch("http://localhost/api/messages")
+    //     .then(async (res) => {
+    //       const response = await res.json();
+    //       let arr = [welcome];
+    //       response.data.map((one, i: number) => {
+    //         arr = [...arr, one.attributes];
+    //         setMessages((msgs) => arr);
+    //       });
+    //     })
+    //     .catch((e) => console.log(e.message));
+  }
+
+  function onConnect() {
+    setIsConnected(true);
+  }
+  function onDisconnect() {
+    setIsConnected(false);
+  }
+
+  useEffect(() => {
+    if (status !== "loading" && session?.user) {
+      socket.emit(
+        "join",
+        { id: session?.id, user: session?.user },
+        (error: string) => {
+          //Sending the username to the backend as the user connects.
+          if (error) return alert(error);
+        }
+      );
+      socket.on("connect", onConnect);
+      socket.on("disconnect", onDisconnect);
+      socket.on("welcome", onWelcome);
+      socket.on("message", onMessage);
+    }
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+      socket.off("welcome", onWelcome);
+      socket.off("message", onMessage);
+    };
+  }, [status]);
+
+  const sendMessage = () => {
     if (message) {
-      io.emit("sendMessage", { message, user: username }, (error: string) => {
+      const userMessage: MessageData = {
+        message,
+        user: session?.user,
+        userId: session?.id,
+      };
+      setMessages([...messages, userMessage]);
+      socket.emit("sendMessage", userMessage, (error: string) => {
         // Sending the message to the backend
         if (error) {
           alert(error);
         }
       });
       setMessage("");
-    } else {
-      alert("Message can't be empty");
     }
   };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChange = (e: ReactInputEvent) => {
     setMessage(e.target.value);
   };
-  const handleClick = () => {
-    sendMessage(message);
+
+  const handleKeyDown = (e: any) => {
+    if (e?.key === "Enter") {
+      sendMessage();
+    }
   };
+
+  const handleClick = () => {
+    sendMessage();
+  };
+
   return (
     <>
-      {session?.user?.name} {session?.id} email={session?.user?.email}
-      {messages.map((item) => (
-        <>- {}</>
-      ))}
+      <span>Webjems Powered chat v0.0.1 beta</span>
+      <div className="flex flex-col max-w-[700px]">
+        {messages.map((item, index) => {
+          const isCurrentUser = item.userId === session?.id;
+          return (
+            <div
+              key={index + "message-user"}
+              className={`${
+                isCurrentUser && "ml-auto items-end"
+              } flex flex-col `}
+            >
+              <span className="">{item.user?.name}</span>
+
+              <span
+                className={` ${
+                  isCurrentUser ? "bg-teal-500" : " bg-green-500"
+                } text-white p-4 block w-fit rounded-xl my-2`}
+              >
+                {item.message}
+              </span>
+            </div>
+          );
+        })}
+      </div>
       <input
+        className=" rounded-lg"
         type="text"
         placeholder="Type your message"
         value={message}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
-      <button onClick={handleClick}>send</button>
+      <button className=" bg-blue-600 py-2 px-4 ml-2" onClick={handleClick}>
+        send
+      </button>
     </>
   );
 }
