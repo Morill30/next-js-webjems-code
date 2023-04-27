@@ -45,8 +45,6 @@ export default function ChatRoom() {
 
   function onMessage(data: MessageData, error: string): any {
     //Listening for a message connection
-    console.log("chat", [...messages, data]);
-    console.log("uno chat", messages, data);
     setMessages((prev) => [...prev, data]);
     //   await fetch("http://localhost/api/messages")
     //     .then(async (res) => {
@@ -68,7 +66,10 @@ export default function ChatRoom() {
   }
 
   useEffect(() => {
-    if (status !== "loading" && session?.user) {
+    if (status !== "loading" && status !== "authenticated") {
+      window.location.href = "/";
+    }
+    if (status === "authenticated" && session?.user) {
       socket.emit(
         "join",
         { id: session?.id, user: session?.user },
@@ -92,7 +93,7 @@ export default function ChatRoom() {
   }, [status]);
 
   const sendMessage = () => {
-    if (message) {
+    if (message && status === "authenticated") {
       const userMessage: MessageData = {
         message,
         user: session?.user,
@@ -157,7 +158,10 @@ export default function ChatRoom() {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-      <button className=" bg-blue-600 py-2 px-4 ml-2" onClick={handleClick}>
+      <button
+        className=" bg-blue-600 py-2 px-4 ml-2 rounded-lg text-white"
+        onClick={handleClick}
+      >
         send
       </button>
     </>
