@@ -66,6 +66,9 @@ export default function ChatRoom() {
   }
 
   useEffect(() => {
+    if (!isConnected) {
+      socket.connect;
+    }
     if (status !== "loading" && status !== "authenticated") {
       window.location.href = "/";
     }
@@ -168,6 +171,9 @@ export default function ChatRoom() {
           send
         </button>
       </div>
+      <span className=" text-center pb-2">
+        {!isConnected && "disconneted!"}
+      </span>
       <span className=" text-center pb-2">
         Webjems Powered chat v0.0.1 beta
       </span>
