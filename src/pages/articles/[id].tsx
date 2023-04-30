@@ -7,7 +7,7 @@ import Likes from "@/components/Likes";
 export default function Article({ post }: { post: any }) {
   const [toggler, setToggler] = useState(false);
   return (
-    <main className={`relative flex flex-col items-center`}>
+    <main className={`relative flex flex-col items-center px-4`}>
       <TopBackgroundHeader />
       {post ? (
         <div className=" -mt-20 md:-mt-32 max-w-[1024px] rounded-lg px-6 md:px-10 shadow-lg border-gray-100 z-10 bg-white">

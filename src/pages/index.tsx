@@ -31,7 +31,7 @@ export default function Home() {
   };
   return (
     <>
-      <main className={`relative flex flex-col`}>
+      <main className={`relative flex flex-col px-4`}>
         <Header />
         <div
           id="profile-content"

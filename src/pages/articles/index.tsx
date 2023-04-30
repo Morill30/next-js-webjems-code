@@ -13,7 +13,7 @@ const plus_Jakarta_Sans = Plus_Jakarta_Sans({
 
 export default function Articles({ posts }: { posts: any }) {
   return (
-    <main className={`relative flex flex-col`}>
+    <main className={`relative flex flex-col px-4`}>
       <div>
         <div className="flex flex-col justify-center md:justify-start ml-10 my-5">
           <h2

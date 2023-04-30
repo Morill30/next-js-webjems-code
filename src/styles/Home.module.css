@@ -1,7 +1,6 @@
 .fullWidth {
   width: calc(100% + 2rem);
-  margin: -1rem;
-  margin-bottom: 0;
+  margin: 0 -1rem;
 }
 
 .description {

@@ -58,7 +58,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
         className="fixed top-0 left-0 z-40 md:z-0 w-64 h-screen transition-transform -translate-x-full md:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto overflow-x-hidden bg-gray-50 dark:bg-gray-800">
+        <div className="h-[100vh] box-border px-3 py-4 overflow-y-auto overflow-x-hidden bg-gray-50 dark:bg-gray-800">
           <Link href="/" className="flex items-center mb-5">
             <Image
               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/images/webjems-logo.png`}
@@ -229,7 +229,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
           )}
         </div>
       </aside>
-      <div className="p-4 md:ml-64">
+      <div className=" md:ml-64">
         {children}
         <Footer />
       </div>

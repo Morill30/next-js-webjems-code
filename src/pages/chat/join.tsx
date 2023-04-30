@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { socket } from "@/config/web-socket";
 import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
@@ -45,7 +45,7 @@ export default function ChatRoom() {
 
   function onMessage(data: MessageData, error: string): any {
     //Listening for a message connection
-    setMessages((prev) => [...prev, data]);
+    setMessages((prev) => [data, ...prev]);
     //   await fetch("http://localhost/api/messages")
     //     .then(async (res) => {
     //       const response = await res.json();
@@ -99,7 +99,7 @@ export default function ChatRoom() {
         user: session?.user,
         userId: session?.id,
       };
-      setMessages([...messages, userMessage]);
+      setMessages([userMessage, ...messages]);
       socket.emit("sendMessage", userMessage, (error: string) => {
         // Sending the message to the backend
         if (error) {
@@ -125,9 +125,8 @@ export default function ChatRoom() {
   };
 
   return (
-    <>
-      <span>Webjems Powered chat v0.0.1 beta</span>
-      <div className="flex flex-col max-w-[700px]">
+    <div className=" h-[calc(100vh-56px)] md:h-[100vh] w-full max-w-full overflow-hidden flex flex-col items-center">
+      <div className="flex flex-col-reverse max-w-[700px] w-full h-full overflow-auto px-3">
         {messages.map((item, index) => {
           const isCurrentUser = item.userId === session?.id;
           return (
@@ -135,35 +134,43 @@ export default function ChatRoom() {
               key={index + "message-user"}
               className={`${
                 isCurrentUser && "ml-auto items-end"
-              } flex flex-col `}
+              } flex flex-col`}
             >
-              <span className="">{item.user?.name}</span>
-
               <span
                 className={` ${
-                  isCurrentUser ? "bg-teal-500" : " bg-green-500"
-                } text-white p-4 block w-fit rounded-xl my-2`}
+                  isCurrentUser
+                    ? "bg-teal-500 items-end rounded-br-none"
+                    : " bg-green-500 items-start rounded-bl-none"
+                } flex flex-col text-white px-4 py-2 w-fit rounded-lg my-2 shadow-md`}
               >
+                <span className=" font-semibold text-sm">
+                  {!isCurrentUser && item.user?.name}
+                </span>
                 {item.message}
               </span>
             </div>
           );
         })}
       </div>
-      <input
-        className=" rounded-lg"
-        type="text"
-        placeholder="Type your message"
-        value={message}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-      />
-      <button
-        className=" bg-blue-600 py-2 px-4 ml-2 rounded-lg text-white"
-        onClick={handleClick}
-      >
-        send
-      </button>
-    </>
+      <div className=" h-[86px] box-border flex justify-center p-5 bg-white border-t-2 border-slate-200 w-full">
+        <input
+          className=" rounded-lg w-full max-w-[400px]"
+          type="text"
+          placeholder="Type your message"
+          value={message}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+        />
+        <button
+          className=" bg-blue-600 py-2 px-4 ml-2 rounded-lg text-white"
+          onClick={handleClick}
+        >
+          send
+        </button>
+      </div>
+      <span className=" text-center pb-2">
+        Webjems Powered chat v0.0.1 beta
+      </span>
+    </div>
   );
 }
