@@ -15,7 +15,7 @@ export default async function handler(
 
   if (session) {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/user-messages/?populate=*`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user-messages/?sort[0]=publishedAt%3Adesc&populate=*&sort[0]=id%3Adesc`,
       {
         method: "GET",
         headers: {
