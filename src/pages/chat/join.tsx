@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { socket } from "@/config/web-socket";
 import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
+import SignInModal from "@/components/signInModal";
 
 type SessionData = {
   data: SessionWeb | null;
@@ -27,37 +28,31 @@ export default function ChatRoom() {
   const [isConnected, setIsConnected] = useState<boolean>(socket.connected);
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   async function onWelcome(data: MessageData, error: string): Promise<any> {
     //Getting the welcome message from the backend
-    const onlineMessage = await getOnlineMessages();
-    console.log(onlineMessage);
-    setMessages([data, onlineMessage]); //Storing the Welcome Message
-    // await fetch("http://localhost/api/messages") //Fetching all messages from Strapi
-    //   .then(async (res) => {
-    //     const response = await res.json();
-    //     let arr: any = [welcome];
-    //     response.data.map((one: any, i: number) => {
-    //       arr = [...arr, one.attributes];
-    //       setMessages([...arr]); // Storing all Messages in a state variable
-    //     });
-    //   })
-    //   .catch((e) => console.log(e.message));
+    const response = await getOnlineMessages();
+
+    const onlineMessage: MessageData[] = response.data.map((message: any) => {
+      return {
+        user: {
+          name: message.attributes.users_permissions_user.data.attributes
+            .username,
+          email:
+            message.attributes.users_permissions_user.data.attributes.email,
+        },
+        message: message.attributes.messageString,
+        userId: message.attributes.users_permissions_user.data.id,
+      };
+    });
+    console.log(data);
+    setMessages([data, ...onlineMessage]); //Storing the Welcome Message
   }
 
   function onMessage(data: MessageData, error: string): any {
     //Listening for a message connection
     setMessages((prev) => [data, ...prev]);
-    //   await fetch("http://localhost/api/messages")
-    //     .then(async (res) => {
-    //       const response = await res.json();
-    //       let arr = [welcome];
-    //       response.data.map((one, i: number) => {
-    //         arr = [...arr, one.attributes];
-    //         setMessages((msgs) => arr);
-    //       });
-    //     })
-    //     .catch((e) => console.log(e.message));
   }
 
   function onConnect() {
@@ -72,9 +67,18 @@ export default function ChatRoom() {
     return await response.json();
   }
 
+  function setShowModalRedirect(data: boolean): void {
+    console.log(data);
+    setShowModal(data);
+    if (data === false) {
+      window.location.href = "/";
+    }
+  }
+
   useEffect(() => {
     if (status !== "loading" && status !== "authenticated") {
-      window.location.href = "/";
+      // window.location.href = "/";
+      setShowModal(true);
     }
     if (status === "authenticated" && session?.user) {
       socket.emit(
@@ -140,6 +144,21 @@ export default function ChatRoom() {
       <div className="flex flex-col-reverse max-w-[700px] w-full h-full overflow-auto px-3 pb-4">
         {messages.map((item, index) => {
           const isCurrentUser = item.userId === session?.id;
+          if (item?.user?.name === "bot") {
+            return (
+              <div
+                key={index + "message-user"}
+                className={`flex flex-col items-center`}
+              >
+                <span
+                  className={`flex flex-col bg-slate-700 text-white px-4 py-2 w-fit rounded-lg my-2 shadow-md`}
+                >
+                  <span className=" font-semibold text-sm">WebJems</span>
+                  {item.message}
+                </span>
+              </div>
+            );
+          }
           return (
             <div
               key={index + "message-user"}
@@ -169,11 +188,15 @@ export default function ChatRoom() {
           type="text"
           placeholder="Type your message"
           value={message}
+          disabled={!isConnected}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
         />
         <button
-          className=" bg-blue-600 py-2 px-4 ml-2 rounded-lg text-white"
+          className={` ${
+            !isConnected && " bg-slate-400"
+          } bg-blue-600 py-2 px-4 ml-2 rounded-lg text-white`}
+          disabled={!isConnected}
           onClick={handleClick}
         >
           Send
@@ -185,6 +208,7 @@ export default function ChatRoom() {
       <span className=" text-center pb-2">
         Webjems Powered chat v0.0.1 beta
       </span>
+      <SignInModal showModal={showModal} setShowModal={setShowModalRedirect} />
     </div>
   );
 }
