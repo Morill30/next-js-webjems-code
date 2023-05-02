@@ -24,13 +24,15 @@ type ReactInputEvent = React.ChangeEvent<HTMLInputElement> & {
 
 export default function ChatRoom() {
   const { data: session, status }: SessionData = useSession();
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isConnected, setIsConnected] = useState<boolean>(socket.connected);
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [message, setMessage] = useState("");
 
   async function onWelcome(data: MessageData, error: string): Promise<any> {
     //Getting the welcome message from the backend
-    setMessages([data]); //Storing the Welcome Message
+    const onlineMessage = await getOnlineMessages();
+    console.log(onlineMessage);
+    setMessages([data, onlineMessage]); //Storing the Welcome Message
     // await fetch("http://localhost/api/messages") //Fetching all messages from Strapi
     //   .then(async (res) => {
     //     const response = await res.json();
@@ -65,10 +67,12 @@ export default function ChatRoom() {
     setIsConnected(false);
   }
 
+  async function getOnlineMessages() {
+    const response = await fetch("/api/user-messages");
+    return await response.json();
+  }
+
   useEffect(() => {
-    if (!isConnected) {
-      socket.connect;
-    }
     if (status !== "loading" && status !== "authenticated") {
       window.location.href = "/";
     }
@@ -85,6 +89,10 @@ export default function ChatRoom() {
       socket.on("disconnect", onDisconnect);
       socket.on("welcome", onWelcome);
       socket.on("message", onMessage);
+
+      if (!isConnected) {
+        socket.connect();
+      }
     }
 
     return () => {
@@ -129,7 +137,7 @@ export default function ChatRoom() {
 
   return (
     <div className=" h-[calc(100vh-56px)] md:h-[100vh] w-full max-w-full overflow-hidden flex flex-col items-center">
-      <div className="flex flex-col-reverse max-w-[700px] w-full h-full overflow-auto px-3">
+      <div className="flex flex-col-reverse max-w-[700px] w-full h-full overflow-auto px-3 pb-4">
         {messages.map((item, index) => {
           const isCurrentUser = item.userId === session?.id;
           return (
@@ -168,7 +176,7 @@ export default function ChatRoom() {
           className=" bg-blue-600 py-2 px-4 ml-2 rounded-lg text-white"
           onClick={handleClick}
         >
-          send
+          Send
         </button>
       </div>
       <span className=" text-center pb-2">
