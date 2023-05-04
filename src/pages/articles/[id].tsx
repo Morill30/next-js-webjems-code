@@ -73,7 +73,10 @@ export default function Article({ post }: { post: any }) {
                 Please dont forget to like
               </span>
 
-              <Likes user_likes={post.data.attributes.user_likes} />
+              <Likes
+                user_likes={post.data.attributes.user_likes}
+                postId={post.id}
+              />
             </div>
           </div>
 

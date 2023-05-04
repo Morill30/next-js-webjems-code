@@ -71,7 +71,10 @@ export default function Articles({ posts }: { posts: any }) {
                     </span>
                   </div>
 
-                  <Likes user_likes={post.attributes.user_likes} />
+                  <Likes
+                    user_likes={post.attributes.user_likes}
+                    postId={post.id}
+                  />
 
                   <div
                     className="pb-3"

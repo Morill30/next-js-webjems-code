@@ -14,7 +14,12 @@ type SessionData = {
   status: string;
 };
 
-export default function Likes({ user_likes }: { user_likes: UserLikes }) {
+type LikeProps = {
+  user_likes: UserLikes;
+  postId: number;
+};
+
+export default function Likes({ user_likes, postId }: LikeProps) {
   const { data: session, status }: SessionData = useSession();
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(user_likes.data.length);
@@ -42,12 +47,12 @@ export default function Likes({ user_likes }: { user_likes: UserLikes }) {
       // remove like
       setLikeCount(likeCount - 1);
       setLike(false);
-      await fetch("/api/likes?postId=2&disconnect");
+      await fetch(`/api/likes?postId=${postId}&disconnect`);
     } else {
       if (status === "authenticated") {
         setLikeCount(likeCount + 1);
         setLike(true);
-        await fetch("/api/likes?postId=2");
+        await fetch(`/api/likes?postId=${postId}`);
       } else {
         setShowModal(true);
       }
