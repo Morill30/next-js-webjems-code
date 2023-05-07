@@ -95,7 +95,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
                 </button>
               </>
             ) : (
-              <Link href={`/user-profile/${session?.id}`}>
+              <Link onClick={handleClick} href={`/user-profile/${session?.id}`}>
                 <div className="flex items-center pl-1 mb-10">
                   <div className=" rounded-full overflow-hidden h-8 w-8">
                     <Image
@@ -221,6 +221,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
             </li>
             <li>
               <Link
+                onClick={handleClick}
                 href="/chat/join"
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
