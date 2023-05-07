@@ -17,9 +17,10 @@ type SessionData = {
 type LikeProps = {
   user_likes: UserLikes;
   postId: number;
+  className?: string;
 };
 
-export default function Likes({ user_likes, postId }: LikeProps) {
+export default function Likes({ user_likes, postId, className }: LikeProps) {
   const { data: session, status }: SessionData = useSession();
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(user_likes.data.length);
@@ -61,7 +62,9 @@ export default function Likes({ user_likes, postId }: LikeProps) {
 
   return (
     <>
-      <div className="flex items-center justify-center cursor-default">
+      <div
+        className={`${className} flex items-center justify-center cursor-default`}
+      >
         <div className={`heart-placement`} onClick={() => syncLike()}>
           <div className={`heart-icon ${like && "is-active"}`} />
         </div>

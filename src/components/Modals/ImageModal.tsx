@@ -1,13 +1,15 @@
 import { ReactElement, useEffect, useState } from "react";
 import Image from "next/image";
-
+type ImageModalProp = {
+  imageURL: string;
+  children: ReactElement;
+  onClick?: Function;
+};
 export default function ImageModal({
   imageURL,
   children,
-}: {
-  imageURL: string;
-  children: ReactElement;
-}) {
+  onClick,
+}: ImageModalProp) {
   const [show, setShow] = useState(false);
   return (
     <>

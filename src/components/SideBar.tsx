@@ -4,9 +4,15 @@ import Image from "next/image";
 import Icons from "@/styles/icons/Icons";
 import Link from "next/link";
 import Footer from "./Footer";
+import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
+
+type SessionData = {
+  data: SessionWeb | null;
+  status: string;
+};
 
 export default function SideBar({ children }: { children: ReactElement }) {
-  const { data: session } = useSession();
+  const { data: session }: SessionData = useSession();
   const button = createRef<HTMLButtonElement>();
   const handleClick = () => {
     if (button.current && window.innerWidth < 768) {
@@ -89,18 +95,20 @@ export default function SideBar({ children }: { children: ReactElement }) {
                 </button>
               </>
             ) : (
-              <div className="flex items-center pl-1 mb-10">
-                <div className=" rounded-full overflow-hidden h-8 w-8">
-                  <Image
-                    src={session?.user?.image || ""}
-                    width={33}
-                    height={33}
-                    alt="user image"
-                    className=" object-cover"
-                  />
+              <Link href={`/user-profile/${session?.id}`}>
+                <div className="flex items-center pl-1 mb-10">
+                  <div className=" rounded-full overflow-hidden h-8 w-8">
+                    <Image
+                      src={session?.user?.image || ""}
+                      width={33}
+                      height={33}
+                      alt="user image"
+                      className=" object-cover"
+                    />
+                  </div>
+                  <span className="pl-2"> {session?.user?.name}</span>
                 </div>
-                <span className="pl-2"> {session?.user?.name}</span>
-              </div>
+              </Link>
             )}
             <li>
               <Link
