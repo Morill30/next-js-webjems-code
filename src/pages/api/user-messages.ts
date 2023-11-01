@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { options, SessionWeb } from "./auth/[...nextauth]";
+import { options } from "./auth/[...nextauth]";
+import { Session } from "next-auth";
 
 type Data = {
   data?: [] | string;
@@ -11,7 +12,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const session: SessionWeb | null = await getServerSession(req, res, options);
+  const session: Session | null = await getServerSession(req, res, options);
 
   if (session) {
     const response = await fetch(

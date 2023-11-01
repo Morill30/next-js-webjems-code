@@ -1,13 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { socket } from "@/config/web-socket";
-import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
+import { SessionData } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import SignInModal from "@/components/signInModal";
-
-type SessionData = {
-  data: SessionWeb | null;
-  status: string;
-};
 
 type MessageData = {
   user?: {
