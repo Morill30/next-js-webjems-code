@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import Modal from "./Modals/Modal";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
-import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
+import { SessionData } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 
 type UserLikes = {
   data: Object[];
-};
-
-type SessionData = {
-  data: SessionWeb | null;
-  status: string;
 };
 
 type LikeProps = {

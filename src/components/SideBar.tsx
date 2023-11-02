@@ -4,12 +4,7 @@ import Image from "next/image";
 import Icons from "@/styles/icons/Icons";
 import Link from "next/link";
 import Footer from "./Footer";
-import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
-
-type SessionData = {
-  data: SessionWeb | null;
-  status: string;
-};
+import { SessionData } from "@/pages/api/auth/[...nextauth]";
 
 export default function SideBar({ children }: { children: ReactElement }) {
   const { data: session }: SessionData = useSession();
