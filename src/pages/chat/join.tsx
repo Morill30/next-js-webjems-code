@@ -4,16 +4,6 @@ import { SessionData } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import SignInModal from "@/components/signInModal";
 
-type MessageData = {
-  user?: {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-  };
-  message: string;
-  userId?: number;
-};
-
 type ReactInputEvent = React.ChangeEvent<HTMLInputElement> & {
   key: any;
 };
