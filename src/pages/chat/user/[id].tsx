@@ -14,12 +14,14 @@ export default function ChatRoom() {
   const { data: session, status }: SessionData = useSession();
   const [isConnected, setIsConnected] = useState<boolean>(socket.connected);
   const [messages, setMessages] = useState<MessageData[]>([]);
-  const [message, setMessage] = useState("");
+  const [inputMessage, setInputMessage] = useState("");
+  const [messagesLoaded, setMessagesLoaded] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
 
   async function parseMessageResponse(): Promise<MessageData[]> {
     //Getting the welcome message from the backend
     const response = await getOnlineMessages();
+    console.log(response);
 
     const onlineMessage: MessageData[] = response.data.map((message: any) => {
       return {
@@ -43,6 +45,7 @@ export default function ChatRoom() {
     } else {
       console.log("an error has occurred!");
     }
+    setMessagesLoaded(true);
   }
 
   function onMessage(data: MessageData, error: string): any {
@@ -84,14 +87,15 @@ export default function ChatRoom() {
       setShowModal(true);
     }
     if (status === "authenticated" && session?.user) {
-      socket.emit(
-        "join",
-        { id: session?.id, user: session?.user },
-        (error: string) => {
-          //Sending the username to the backend as the user connects.
-          if (error) return alert(error);
-        }
-      );
+      const connectionObject: ConnectionObject = {
+        userId: session?.id,
+        user: session?.user,
+        friendId: parseInt(router.query.id as string),
+      };
+      socket.emit("join", connectionObject, (error: string) => {
+        //Sending the username to the backend as the user connects.
+        if (error) return alert(error);
+      });
       socket.on("connect", onConnect);
       socket.on("disconnect", onDisconnect);
       socket.on("welcome", onWelcome);
@@ -111,12 +115,16 @@ export default function ChatRoom() {
   }, [status]);
 
   const sendMessage = () => {
-    if (message && status === "authenticated") {
+    if (inputMessage && status === "authenticated") {
       const userMessage: MessageData = {
-        message,
+        message: inputMessage,
         user: session?.user,
         userId: session?.id,
-        friendId: router.query.id?.toString(),
+        connectionObject: {
+          userId: session?.id,
+          user: session?.user,
+          friendId: parseInt(router.query.id as string),
+        },
       };
       setMessages([userMessage, ...messages]);
       socket.emit("sendMessage", userMessage, (error: string) => {
@@ -125,12 +133,12 @@ export default function ChatRoom() {
           alert(error);
         }
       });
-      setMessage("");
+      setInputMessage("");
     }
   };
 
   const handleChange = (e: ReactInputEvent) => {
-    setMessage(e.target.value);
+    setInputMessage(e.target.value);
   };
 
   const handleKeyDown = (e: any) => {
@@ -186,7 +194,7 @@ export default function ChatRoom() {
               </div>
             );
           })
-        ) : (
+        ) : !messagesLoaded ? (
           <ul className="mt-5 space-y-3 animate-pulse">
             <li className="w-36 h-11 ml-auto bg-gray-200 rounded-md dark:bg-gray-700"></li>
             <li className="w-36 h-11 bg-gray-200 rounded-md dark:bg-gray-700"></li>
@@ -195,6 +203,8 @@ export default function ChatRoom() {
             <li className="w-36 h-11 bg-gray-200 rounded-md dark:bg-gray-700"></li>
             <li className="w-56 h-11 ml-auto bg-gray-200 rounded-md dark:bg-gray-700"></li>
           </ul>
+        ) : (
+          <div className="flex justify-center">Chat has not started yet!</div>
         )}
       </div>
       <div className=" h-[86px] box-border flex justify-center p-5 bg-white border-t-2 border-slate-200 w-full">
@@ -202,7 +212,7 @@ export default function ChatRoom() {
           className=" rounded-lg w-full max-w-[400px]"
           type="text"
           placeholder="Type your message"
-          value={message}
+          value={inputMessage}
           disabled={!isConnected}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
