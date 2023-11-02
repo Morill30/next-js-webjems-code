@@ -4,12 +4,7 @@ import Image from "next/image";
 import Icons from "@/styles/icons/Icons";
 import Link from "next/link";
 import Footer from "./Footer";
-import { SessionWeb } from "@/pages/api/auth/[...nextauth]";
-
-type SessionData = {
-  data: SessionWeb | null;
-  status: string;
-};
+import { SessionData } from "@/pages/api/auth/[...nextauth]";
 
 export default function SideBar({ children }: { children: ReactElement }) {
   const { data: session }: SessionData = useSession();
@@ -237,6 +232,18 @@ export default function SideBar({ children }: { children: ReactElement }) {
                 </svg>
                 <span className="flex-1 ml-3 whitespace-nowrap">
                   Join Live Chat
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                onClick={handleClick}
+                href="/chat/users"
+                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <Icons type="message" className="fill-gray-700 h-[20px] mr-2" />
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Webjems Users
                 </span>
               </Link>
             </li>

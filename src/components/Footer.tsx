@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 export default function Footer() {
   const router = useRouter();
-  const isChat = router.pathname === "/chat/join";
+  const isChat = router.pathname.includes("/chat/");
 
   return (
     <>
