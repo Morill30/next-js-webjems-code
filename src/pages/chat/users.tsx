@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { SessionData } from "@/pages/api/auth/[...nextauth]";
 
 import { Plus_Jakarta_Sans } from "next/font/google";
+import SignInModal from "@/components/signInModal";
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -12,9 +13,22 @@ const plus_Jakarta_Sans = Plus_Jakarta_Sans({
 export default function Users() {
   const { data: session, status }: SessionData = useSession();
   const [users, setUsers] = useState<Array<any>>();
+  const [showModal, setShowModal] = useState(false);
+
+  function setShowModalRedirect(data: boolean): void {
+    console.log(data);
+    setShowModal(data);
+    if (data === false) {
+      window.location.href = "/";
+    }
+  }
 
   useEffect(() => {
     getUsers();
+    if (status !== "loading" && status !== "authenticated") {
+      // window.location.href = "/";
+      setShowModal(true);
+    }
   }, [session]);
 
   useEffect(() => {
@@ -92,12 +106,12 @@ export default function Users() {
         ) : (
           <div className=" flex justify-center items-center h-[50vh]">
             <span className=" text-gray-600 font-normal text-2xl text-center">
-              Sorry the service your are trying to see is not available at the
-              moment.
+              Please Log in to chat!
             </span>
           </div>
         )}
       </div>
+      <SignInModal showModal={showModal} setShowModal={setShowModalRedirect} />
     </main>
   );
 }
