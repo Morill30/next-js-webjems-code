@@ -68,7 +68,7 @@ export default function ChatRoom() {
       body: JSON.stringify({
         userId: session?.id,
         friendId: router.query.id,
-      }),
+      } as ConnectionObject),
     });
     return await response.json();
   }
