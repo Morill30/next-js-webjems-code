@@ -18,6 +18,7 @@ declare global {
   type ConnectionObject = {
     userId: number | undefined;
     user: User | undefined;
-    friendId: number | undefined;
+    friendId?: number | undefined;
+    groupChatName?: string;
   };
 }
