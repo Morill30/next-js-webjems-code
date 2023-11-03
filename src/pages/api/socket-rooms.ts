@@ -13,42 +13,53 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const session: Session | null = await getServerSession(req, res, options);
-  const { userId, friendId } = JSON.parse(req.body);
+  const { userId, friendId, groupChatName }: ConnectionObject = JSON.parse(
+    req.body
+  );
 
   function getSocketRoomId() {
-    if (userId < friendId) {
-      return userId + "-" + friendId;
+    if (groupChatName) return groupChatName;
+    if (userId && friendId) {
+      return userId < friendId
+        ? `${userId}-${friendId}`
+        : `${friendId}-${userId}`;
     } else {
-      return friendId + "-" + userId;
+      throw new Error("userId or friendId is undefined");
     }
   }
 
-  if (session) {
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_API_URL
-      }/api/user-messages?populate=*&filters[socket_room][roomId]eq=${getSocketRoomId()}&sort=publishedAt:desc`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `bearer ${process.env.STRAPI_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data = await response.text();
-    const responseMessage = JSON.parse(data);
+  try {
+    if (session) {
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/api/user-messages?populate=*&filters[socket_room][roomId]eq=${getSocketRoomId()}&sort=publishedAt:desc`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `bearer ${process.env.STRAPI_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.text();
+      const responseMessage = JSON.parse(data);
 
-    if (!responseMessage.error) {
-      res.status(200).json(responseMessage);
+      if (!responseMessage.error) {
+        res.status(200).json(responseMessage);
+      } else {
+        res.status(400).json({
+          data: "Wrong id or something is wrong",
+        });
+      }
     } else {
       res.status(400).json({
-        data: "Wrong id or something is wrong",
+        data: "You must be sign in to view the protected content on this page.",
       });
     }
-  } else {
+  } catch (error: Error | any) {
     res.status(400).json({
-      data: "You must be sign in to view the protected content on this page.",
+      data: error.message ? error.message : error,
     });
   }
 }
