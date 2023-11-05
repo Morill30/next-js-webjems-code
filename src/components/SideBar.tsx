@@ -90,8 +90,8 @@ export default function SideBar({ children }: { children: ReactElement }) {
                 </button>
               </>
             ) : (
-              <Link onClick={handleClick} href={`/user-profile/${session?.id}`}>
-                <div className="flex items-center pl-1 mb-10">
+              <Link onClick={handleClick} href={`/user/${session?.id}`}>
+                <div className="flex items-center pl-1 pb-2 pt-2 border rounded-lg border-gray-200 hover:bg-slate-100">
                   <div className=" rounded-full overflow-hidden h-8 w-8">
                     <Image
                       src={session?.user?.image || ""}
@@ -190,22 +190,6 @@ export default function SideBar({ children }: { children: ReactElement }) {
                 </span>
                 <span className="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
                   3
-                </span>
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="https://github.com/Morill30"
-                type="button"
-                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <Icons
-                  type="Github"
-                  className="flex-shrink-0 w-6 h-6 -ml-0 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white mr-0"
-                />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Check Github Repos
                 </span>
               </a>
             </li>
