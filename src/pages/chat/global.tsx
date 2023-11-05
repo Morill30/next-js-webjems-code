@@ -80,8 +80,7 @@ export default function ChatRoom() {
   }
 
   useEffect(() => {
-    if (status !== "loading" && status !== "authenticated") {
-      // window.location.href = "/";
+    if (status === "unauthenticated") {
       setShowModal(true);
     }
     if (status === "authenticated" && session?.user) {

@@ -21,7 +21,6 @@ export default function ChatRoom() {
   async function parseMessageResponse(): Promise<MessageData[]> {
     //Getting the welcome message from the backend
     const response = await getOnlineMessages();
-    console.log(response);
 
     const onlineMessage: MessageData[] = response.data.map((message: any) => {
       return {
@@ -66,8 +65,9 @@ export default function ChatRoom() {
     const response = await fetch("/api/socket-rooms", {
       method: "POST",
       body: JSON.stringify({
-        userId: session?.id,
         friendId: router.query.id,
+        userId: session?.id,
+        user: session?.user,
       } as ConnectionObject),
     });
     return await response.json();
@@ -82,8 +82,7 @@ export default function ChatRoom() {
   }
 
   useEffect(() => {
-    if (status !== "loading" && status !== "authenticated") {
-      // window.location.href = "/";
+    if (status === "unauthenticated") {
       setShowModal(true);
     }
     if (status === "authenticated" && session?.user) {
