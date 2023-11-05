@@ -1,8 +1,10 @@
 import Card from "@/components/Profile/Cards/Card";
-import { METHODS } from "http";
+import { SessionData } from "@/pages/api/auth/[...nextauth]";
+import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 
 export default function ProfileEditTab() {
+  const { data: session, status }: SessionData = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageDidChange, setImageDidChange] = useState<boolean>(false);
   const [imageFile, setImage] = useState<File | undefined>();
@@ -27,14 +29,26 @@ export default function ProfileEditTab() {
   const uploadImage = async () => {
     const formData = new FormData();
     if (imageFile) {
-      formData.append("image", imageFile);
+      formData.append(
+        "ref",
+        "plugin::users-permissions.user" // Model name
+      );
+      formData.append("refId", `${session?.id}`);
+      formData.append("field", "profileImage");
+      formData.append("files", imageFile);
     }
     try {
-      const response = await fetch("/api/user/update-image", {
-        method: "POST",
-        body: formData,
-      });
-      console.log("Image uploaded successfully", response);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `bearer ${session?.jwt}`,
+          },
+          body: formData,
+        }
+      );
+      console.log("Image uploaded successfully", await response.json());
     } catch (error) {
       console.error("Image upload failed", error);
     }
@@ -59,9 +73,9 @@ export default function ProfileEditTab() {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                 />
               </svg>
