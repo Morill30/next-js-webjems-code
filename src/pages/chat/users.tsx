@@ -25,8 +25,7 @@ export default function Users() {
 
   useEffect(() => {
     getUsers();
-    if (status !== "loading" && status !== "authenticated") {
-      // window.location.href = "/";
+    if (status === "unauthenticated") {
       setShowModal(true);
     }
   }, [session]);
