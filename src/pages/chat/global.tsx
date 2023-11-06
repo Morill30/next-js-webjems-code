@@ -8,6 +8,15 @@ type ReactInputEvent = React.ChangeEvent<HTMLInputElement> & {
   key: any;
 };
 
+type UserInfo = {
+  username?: string;
+  email?: string;
+  id?: number;
+  provider?: string;
+  displayName?: string;
+  profileImage?: string;
+};
+
 export default function ChatRoom() {
   const { data: session, status }: SessionData = useSession();
   const [isConnected, setIsConnected] = useState<boolean>(socket.connected);
@@ -149,8 +158,14 @@ export default function ChatRoom() {
   };
 
   return (
-    <div className=" h-[calc(100vh-56px)] md:h-[100vh] w-full max-w-full overflow-hidden flex flex-col items-center">
-      <div className="flex flex-col-reverse max-w-[700px] w-full h-full overflow-auto px-3 pb-4">
+    <div className=" bg-white h-[calc(100vh-56px)] md:h-[100vh] w-full max-w-full overflow-hidden flex flex-col items-center">
+      <div className=" flex items-center gap-4 w-full bg-slate-200 p-4">
+        <div className=" flex justify-center items-center rounded-full h-9 w-9 bg-green-600 text-white uppercase">
+          G
+        </div>
+        <div className=" inline-block text-slate-500">Global Chat</div>
+      </div>
+      <div className="flex flex-1 flex-col-reverse max-w-[700px] w-full h-full overflow-auto px-3 pb-4">
         {messages.length ? (
           messages.map((item, index) => {
             const isCurrentUser = item.userId === session?.id;
@@ -204,7 +219,7 @@ export default function ChatRoom() {
           <div className="flex justify-center">Chat has not started yet!</div>
         )}
       </div>
-      <div className=" h-[86px] box-border flex justify-center p-5 bg-white border-t-2 border-slate-200 w-full">
+      <div className=" h-[86px] box-border flex justify-center p-5 bg-white shadow-inner w-full">
         <input
           className=" rounded-lg w-full max-w-[400px]"
           type="text"
@@ -217,18 +232,22 @@ export default function ChatRoom() {
         <button
           className={` ${
             !isConnected && " bg-slate-400"
-          } bg-blue-600 py-2 px-4 ml-2 rounded-lg text-white`}
+          } bg-slate-500 py-2 px-4 ml-2 rounded-lg text-white`}
           disabled={!isConnected}
           onClick={handleClick}
         >
           Send
         </button>
+        <div className=" flex items-center ml-5">
+          {isConnected ? (
+            <span className=" block h-3 w-3 bg-green-600 rounded-full shadow-md" />
+          ) : (
+            <span className=" block h-3 w-3 bg-red-600 rounded-full shadow-md" />
+          )}
+        </div>
       </div>
-      <span className=" text-center pb-2">
-        {!isConnected && "disconneted!"}
-      </span>
-      <span className=" text-center pb-2">
-        Webjems Powered chat v0.0.1 beta
+      <span className=" text-center pb-2 text-slate-800 font-thin">
+        Webjems Powered chat v0.0.2
       </span>
       <SignInModal showModal={showModal} setShowModal={setShowModalRedirect} />
     </div>
