@@ -1,5 +1,6 @@
 import { createRef, ReactElement, useRef } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useUserContext } from "@/contexts/userContext";
 import Image from "next/image";
 import Icons from "@/styles/icons/Icons";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import { SessionData } from "@/pages/api/auth/[...nextauth]";
 export default function SideBar({ children }: { children: ReactElement }) {
   const { data: session }: SessionData = useSession();
   const button = createRef<HTMLButtonElement>();
+  const { user, updateOnlineUser } = useUserContext();
   const handleClick = () => {
     if (button.current && window.innerWidth < 768) {
       button.current.click();
@@ -93,15 +95,25 @@ export default function SideBar({ children }: { children: ReactElement }) {
               <Link onClick={handleClick} href={`/user/${session?.id}`}>
                 <div className="flex items-center pl-1 pb-2 pt-2 border rounded-lg border-gray-200 hover:bg-slate-100">
                   <div className=" rounded-full overflow-hidden h-8 w-8">
-                    <Image
-                      src={session?.user?.image || ""}
-                      width={33}
-                      height={33}
-                      alt="user image"
-                      className=" object-cover"
-                    />
+                    {user?.strapiUser?.profileImage?.url ? (
+                      <Image
+                        src={user?.strapiUser?.profileImage?.url}
+                        width={33}
+                        height={33}
+                        alt="user image"
+                        className=" object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src={session?.user?.image || ""}
+                        width={33}
+                        height={33}
+                        alt="user image"
+                        className=" object-cover"
+                      />
+                    )}
                   </div>
-                  <span className="pl-2"> {session?.user?.name}</span>
+                  <span className="pl-2"> {user?.strapiUser?.displayName}</span>
                 </div>
               </Link>
             )}
