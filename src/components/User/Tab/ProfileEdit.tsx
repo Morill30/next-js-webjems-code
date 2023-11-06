@@ -1,9 +1,12 @@
 import Card from "@/components/Profile/Cards/Card";
+import { useUserContext } from "@/contexts/userContext";
 import { SessionData } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 export default function ProfileEditTab() {
+  const user = useUserContext();
   const { data: session, status }: SessionData = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageDidChange, setImageDidChange] = useState<boolean>(false);
@@ -38,16 +41,10 @@ export default function ProfileEditTab() {
       formData.append("files", imageFile);
     }
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `bearer ${session?.jwt}`,
-          },
-          body: formData,
-        }
-      );
+      const response = await fetch(`/api/user/update-image`, {
+        method: "POST",
+        body: formData,
+      });
       console.log("Image uploaded successfully", await response.json());
     } catch (error) {
       console.error("Image upload failed", error);
@@ -58,43 +55,62 @@ export default function ProfileEditTab() {
     <Card>
       <>
         <h3> Profile Picture </h3>
-        <div className="flex items-center justify-center w-full">
-          <label
-            htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full h-54 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-          >
-            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <svg
-                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 16"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                />
-              </svg>
-              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">Click to upload</span> or drag
-                and drop
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                SVG, PNG, JPG or GIF
-              </p>
-            </div>
-            <input
-              id="dropzone-file"
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              onChange={handleFileChange}
-              accept="image/*"
-            />
+        <div className="flex">
+          <div className="flex justify-center items-center w-[200px]">
+            {user.strapiUser?.profileImage?.url ? (
+              <Image
+                src={user.strapiUser?.profileImage?.url}
+                width={100}
+                height={100}
+                alt="Picture of the author"
+              />
+            ) : (
+              <>Loading</>
+            )}
+          </div>
+          <div className="flex items-center justify-center w-full">
+            <label
+              htmlFor="dropzone-file"
+              className="flex flex-col items-center justify-center w-full h-54 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            >
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg
+                  className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 16"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                  />
+                </svg>
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  SVG, PNG, JPG or GIF
+                </p>
+              </div>
+              <input
+                id="dropzone-file"
+                ref={fileInputRef}
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+            </label>
+          </div>
+        </div>
+        <div className="mt-5 text-sm">
+          <label className=" font-bold">
+            {imageFile?.name && "File name:"}{" "}
           </label>
           <label>{imageFile?.name}</label>
         </div>
@@ -108,7 +124,7 @@ export default function ProfileEditTab() {
           onChange={(e) => setDisplayName(e.target.value)}
           maxLength={30}
         />
-        <button onClick={handleSave} className=" rounded-lg mt-5">
+        <button onClick={handleSave} className=" btn rounded-lg mt-5">
           Save
         </button>
       </>
