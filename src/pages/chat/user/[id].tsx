@@ -237,7 +237,7 @@ export default function ChatRoom() {
           <div className="flex justify-center">Chat has not started yet!</div>
         )}
       </div>
-      <div className=" h-[86px] box-border flex justify-center p-5 shadow-inner w-full">
+      <div className=" h-[86px] box-border flex justify-center p-5 bg-white shadow-inner w-full">
         <input
           className=" rounded-lg w-full max-w-[400px] bg-slate-100 border-2 border-slate-200"
           type="text"

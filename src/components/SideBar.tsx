@@ -113,7 +113,12 @@ export default function SideBar({ children }: { children: ReactElement }) {
                       />
                     )}
                   </div>
-                  <span className="pl-2"> {user?.strapiUser?.displayName}</span>
+                  <span className="pl-2">
+                    {" "}
+                    {user?.strapiUser?.displayName
+                      ? user?.strapiUser?.displayName
+                      : user?.authUser?.user?.name}
+                  </span>
                 </div>
               </Link>
             )}
