@@ -1,4 +1,4 @@
-import HeaderEdit from "@/components/Profile/HeaderEdit";
+import UserHeader from "@/components/Profile/UserHeader";
 import SummaryCard from "@/components/Profile/Cards/SummaryCard";
 import SkillsCard from "@/components/Profile/Cards/SkillsCard";
 import "react-multi-carousel/lib/styles.css";
@@ -10,7 +10,7 @@ export default function UserProfile() {
   return (
     <>
       <main className={`relative flex flex-col px-4`}>
-        <HeaderEdit />
+        <UserHeader />
         {session?.user && (
           <a
             className=" bg-blue-500 w-fit p-2 rounded-lg text-white"
