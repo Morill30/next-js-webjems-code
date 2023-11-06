@@ -4,8 +4,7 @@ import { SessionData } from "../api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import TextHeader from "@/components/TextHeader";
-import { useRef, useState } from "react";
-import Card from "@/components/Profile/Cards/Card";
+import { useState } from "react";
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
