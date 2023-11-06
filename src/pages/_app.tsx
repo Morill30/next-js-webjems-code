@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import * as ga from "@/utils/googleAnalytics/ga";
 import { SessionProvider } from "next-auth/react";
 import "flowbite";
+import { UserProvider } from "@/contexts/userContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -56,9 +57,11 @@ export default function App({ Component, pageProps }: AppProps) {
         `}
       </Script>
       <SessionProvider session={pageProps.session}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <UserProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </UserProvider>
       </SessionProvider>
     </>
   );
