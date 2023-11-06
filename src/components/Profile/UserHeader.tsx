@@ -5,7 +5,7 @@ import ImageModal from "@/components/Modals/ImageModal";
 import { useUserContext } from "@/contexts/userContext";
 
 export default function ProfileHeader() {
-  const user = useUserContext();
+  const { user } = useUserContext();
   return (
     <header>
       <TopBackgroundHeader />
@@ -39,7 +39,7 @@ export default function ProfileHeader() {
           </ImageModal>
           <div className="flex flex-col ml-4 md:ml-6 items-start bottom-2 md:bottom-10 relative">
             <span className="font-bold max-[377px]:text-sm text-md md:text-[20px] text-gray-700">
-              User
+              {user.strapiUser?.displayName}
             </span>
             <span className="font-normal max-[377px]:text-[10px] text-[12px] md:text-[14px] text-gray-500">
               This is the small description of your position

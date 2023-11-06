@@ -5,31 +5,66 @@ import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type User = {
-  authUser?: Session;
+  authUser?: Session | null;
   strapiUser?: any;
 };
 
-const Context = createContext<User>({});
+type UserContext = {
+  user: User;
+  updateOnlineUser: () => void;
+};
+
+const Context = createContext<UserContext>({
+  user: {},
+  updateOnlineUser: () => {},
+});
 
 export function UserProvider({ children }: React.PropsWithChildren) {
   const [user, setUser] = useState<User>({});
   const { data: session, status }: SessionData = useSession();
+
+  const updateOnlineUser = () => {
+    axios
+      .get(`/api/user/${session?.id}?populate=displayName,profileImage`)
+      .then((response) => {
+        const strapiUserResponse = response?.data?.data;
+        localStorage.setItem("strapi-user", JSON.stringify(strapiUserResponse));
+        setUser({
+          authUser: session,
+          strapiUser: strapiUserResponse,
+        });
+      });
+  };
 
   useEffect(() => {
     if (session) {
       setUser({
         authUser: session,
       });
-      axios.get(`/api/user/${session?.id}`).then((response) => {
+
+      const localStrapiuser = localStorage.getItem("strapi-user");
+
+      const strapiUser =
+        localStrapiuser !== "undefined" || localStrapiuser !== null
+          ? JSON.parse(localStorage.getItem("strapi-user" || "") as string)
+          : undefined;
+
+      if (!strapiUser) {
+        updateOnlineUser();
+      } else {
         setUser({
           authUser: session,
-          strapiUser: response?.data?.data?.[0],
+          strapiUser: strapiUser,
         });
-      });
+      }
     }
   }, [session]);
 
-  return <Context.Provider value={user}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={{ user, updateOnlineUser }}>
+      {children}
+    </Context.Provider>
+  );
 }
 
 export function useUserContext() {

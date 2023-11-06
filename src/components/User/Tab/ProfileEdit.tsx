@@ -4,9 +4,10 @@ import { SessionData } from "@/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import axios from "axios";
 
 export default function ProfileEditTab() {
-  const user = useUserContext();
+  const { user, updateOnlineUser } = useUserContext();
   const { data: session, status }: SessionData = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageDidChange, setImageDidChange] = useState<boolean>(false);
@@ -22,10 +23,34 @@ export default function ProfileEditTab() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Trigger the file input element to open the file selection dialog.
-    if (fileInputRef.current && imageDidChange) {
-      uploadImage();
+    try {
+      if (fileInputRef.current && imageDidChange) {
+        await uploadImage();
+      }
+      await updateDisplayName();
+      updateOnlineUser();
+      alert("Profile updated successfully");
+    } catch (error) {
+      alert("Profile update failed");
+    }
+  };
+
+  const updateDisplayName = async () => {
+    try {
+      const response = await axios(`/api/user/${session?.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          displayName: displayName,
+        },
+      });
+      console.log("Display name updated successfully", response.data);
+    } catch (error) {
+      console.error("Display name update failed", error);
     }
   };
 
@@ -51,15 +76,21 @@ export default function ProfileEditTab() {
     }
   };
 
+  useEffect(() => {
+    if (user?.strapiUser?.displayName) {
+      setDisplayName(user?.strapiUser?.displayName);
+    }
+  }, [user]);
+
   return (
     <Card>
       <>
         <h3> Profile Picture </h3>
         <div className="flex">
           <div className="flex justify-center items-center w-[200px]">
-            {user.strapiUser?.profileImage?.url ? (
+            {user?.strapiUser?.profileImage?.url ? (
               <Image
-                src={user.strapiUser?.profileImage?.url}
+                src={user?.strapiUser?.profileImage?.url}
                 width={100}
                 height={100}
                 alt="Picture of the author"

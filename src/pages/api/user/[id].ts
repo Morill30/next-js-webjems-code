@@ -9,12 +9,6 @@ type Data = {
   data?: [] | string;
 };
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -25,18 +19,19 @@ export default async function handler(
 
   try {
     if (session) {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users?populate=displayName,profileImage&filters[id]=${id}`,
-        {
-          headers: {
-            Authorization: `bearer ${process.env.STRAPI_KEY}`,
-            "Content-Type": req.headers["content-type"],
-          },
-        }
-      );
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}`,
+        method: req.method,
+        params: req.method === "GET" ? req.query : null,
+        headers: {
+          Authorization: `bearer ${process.env.STRAPI_KEY}`,
+          "Content-Type": req.headers["content-type"],
+        },
+        data: req.method !== "GET" ? req.body : null,
+      });
 
       res.status(response?.status).json({
-        data: response?.data,
+        data: response.data,
       });
     } else {
       res.status(400).json({

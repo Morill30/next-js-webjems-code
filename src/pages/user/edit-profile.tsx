@@ -55,7 +55,7 @@ export default function EditProfile() {
       case "Profile":
         return <ProfileEditTab />;
       case "Account":
-        return "hello2";
+        return "Please Email me to delete your account morillo30@gmail.com";
       default:
         return "hello3";
     }
