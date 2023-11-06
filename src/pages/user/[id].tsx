@@ -4,6 +4,7 @@ import SkillsCard from "@/components/Profile/Cards/SkillsCard";
 import "react-multi-carousel/lib/styles.css";
 import { SessionData } from "../api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function UserProfile() {
   const { data: session, status }: SessionData = useSession();
@@ -12,12 +13,12 @@ export default function UserProfile() {
       <main className={`relative flex flex-col px-4`}>
         <UserHeader />
         {session?.user && (
-          <a
+          <Link
             className=" bg-blue-500 w-fit p-2 rounded-lg text-white"
             href="/user/edit-profile/"
           >
             Edit Profle
-          </a>
+          </Link>
         )}
         <div
           id="profile-content"
