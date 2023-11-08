@@ -16,7 +16,6 @@ export default function Users() {
   const [showModal, setShowModal] = useState(false);
 
   function setShowModalRedirect(data: boolean): void {
-    console.log(data);
     setShowModal(data);
     if (data === false) {
       window.location.href = "/";
@@ -29,10 +28,6 @@ export default function Users() {
       setShowModal(true);
     }
   }, [session]);
-
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
 
   async function getUsers() {
     try {
@@ -57,7 +52,9 @@ export default function Users() {
           >
             Users
           </h2>
-          <span className="text-gray-600 ">Latest articles from Jean</span>
+          <span className="text-gray-600 ">
+            Chat with some of WebJems users
+          </span>
 
           <div className={`${plus_Jakarta_Sans.className} mt-10 mb-4 `}>
             <ul
@@ -84,7 +81,7 @@ export default function Users() {
         {users ? (
           users.map((user: any, index: number) => (
             <React.Fragment key={index + "-postsx"}>
-              <div className=" max-w-[425px] text-left flex flex-col rounded-md border-4 border-white shadow-md">
+              <div className=" max-w-[425px] text-left flex flex-col rounded-md border-4 border-white shadow-md mb-2">
                 <div className=" p-4">
                   <div className=" flex flex-col md:flex-row md:justify-between md:items-center pb-2">
                     <span className=" font-semibold text-gray-700">
