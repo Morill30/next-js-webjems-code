@@ -21,7 +21,7 @@ export default function Articles({ posts }: { posts: any }) {
           >
             Articles
           </h2>
-          <span className="text-gray-600 ">Latest articles from Jean</span>
+          <span className="text-gray-600 ">Latest articles in WebJems</span>
 
           <div className={`${plus_Jakarta_Sans.className} mt-10 mb-4 `}>
             <ul
