@@ -101,7 +101,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
                         width={33}
                         height={33}
                         alt="user image"
-                        className=" object-cover"
+                        className=" object-cover h-8"
                       />
                     ) : (
                       <Image
@@ -109,7 +109,7 @@ export default function SideBar({ children }: { children: ReactElement }) {
                         width={33}
                         height={33}
                         alt="user image"
-                        className=" object-cover"
+                        className=" object-cover h-8"
                       />
                     )}
                   </div>
@@ -167,25 +167,6 @@ export default function SideBar({ children }: { children: ReactElement }) {
                 </svg>
                 <span className="ml-3">Articles</span>
               </Link>
-            </li>
-            <li>
-              <a
-                href="https://www.linkedin.com/in/jean-morillo-30/"
-                target="_blank"
-                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <Icons
-                  type="Linkedin"
-                  className=" h-[26px] w-[25px] fill-gray-500"
-                />
-                <span className="flex-1 ml-3 whitespace-nowrap flex items-center">
-                  Linkedin{" "}
-                  <Icons
-                    type="up-right-arrow"
-                    className="fill-black h-[12px] ml-2"
-                  />
-                </span>
-              </a>
             </li>
             <li>
               <a
