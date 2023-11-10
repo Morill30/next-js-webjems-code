@@ -99,7 +99,13 @@ export default function EditProfile() {
               </ul>
             </div>
             <div className=" py-10">
-              {session?.user ? selectedTabContent() : "Loading"}
+              {session?.user ? (
+                selectedTabContent()
+              ) : (
+                <ul className="animate-pulse w-[80%] h-[400px]">
+                  <li className="bg-gray-200 rounded-md dark:bg-gray-700 w-[60%] h-[400px]"></li>
+                </ul>
+              )}
             </div>
           </div>
         </div>
