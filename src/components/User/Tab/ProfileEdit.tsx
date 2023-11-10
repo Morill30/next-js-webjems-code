@@ -22,10 +22,22 @@ export default function ProfileEditTab() {
   const crop = () => {
     const cropper = cropperRef.current?.cropper;
     const croppedCanvas = cropper?.getCroppedCanvas();
-    croppedCanvas?.toBlob((blob) => {
-      setImage(blob);
-      setShowCropper(false);
-    });
+    const dataUrl = croppedCanvas?.toDataURL();
+    setImage(dataURLtoFile(dataUrl as string, imageFile?.name as string));
+    setShowCropper(false);
+  };
+
+  const dataURLtoFile = (dataurl: string, filename: string) => {
+    const arr = dataurl.split(",");
+    const mime = arr?.[0]?.match(/:(.*?);/)?.[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n) {
+      u8arr[n - 1] = bstr.charCodeAt(n - 1);
+      n -= 1; // to make eslint happy
+    }
+    return new File([u8arr], filename, { type: mime });
   };
 
   const rotate = () => {
