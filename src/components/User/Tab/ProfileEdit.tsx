@@ -5,14 +5,33 @@ import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
+import Cropper, { ReactCropperElement } from "react-cropper";
+import "cropperjs/dist/cropper.css";
 
 export default function ProfileEditTab() {
   const { user, updateOnlineUser } = useUserContext();
   const { data: session, status }: SessionData = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageDidChange, setImageDidChange] = useState<boolean>(false);
-  const [imageFile, setImage] = useState<File | undefined>();
+  const [imageFile, setImage] = useState<File | Blob | undefined | null>();
+  const [imageUrl, setImageUrl] = useState<string | null>("");
+  const [showCropper, setShowCropper] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>("");
+  const cropperRef = useRef<ReactCropperElement>(null);
+
+  const crop = () => {
+    const cropper = cropperRef.current?.cropper;
+    const croppedCanvas = cropper?.getCroppedCanvas();
+    croppedCanvas?.toBlob((blob) => {
+      setImage(blob);
+      setShowCropper(false);
+    });
+  };
+
+  const rotate = () => {
+    const cropper = cropperRef.current?.cropper;
+    cropper?.rotate(90);
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
@@ -20,6 +39,7 @@ export default function ProfileEditTab() {
       const imageFileLocal = fileList[0];
       setImage(imageFileLocal);
       setImageDidChange(true);
+      setShowCropper(true);
     }
   };
 
@@ -82,21 +102,36 @@ export default function ProfileEditTab() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (imageFile) {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        if (typeof fileReader.result === "string")
+          setImageUrl(fileReader.result as string);
+      };
+      fileReader.readAsDataURL(imageFile);
+    }
+  }, [imageFile]);
+
   return (
     <Card>
       <>
         <h3> Profile Picture </h3>
         <div className="flex">
-          <div className="flex justify-center items-center w-[200px]">
+          <div className="flex justify-center items-center w-[140px] mr-5 overflow-hidden rounded-md shadow-sm">
             {user?.strapiUser?.profileImage?.url ? (
               <Image
                 src={user?.strapiUser?.profileImage?.url}
-                width={100}
-                height={100}
+                width={140}
+                height={140}
                 alt="Picture of the author"
+                className=" h-[140px] w-[140px]"
+                style={{ objectFit: "cover" }}
               />
             ) : (
-              <>Loading</>
+              <ul className="animate-pulse w-full h-full">
+                <li className="bg-gray-200 rounded-md dark:bg-gray-700 w-full h-full"></li>
+              </ul>
             )}
           </div>
           <div className="flex items-center justify-center w-full">
@@ -158,6 +193,25 @@ export default function ProfileEditTab() {
         <button onClick={handleSave} className=" btn rounded-lg mt-5">
           Save
         </button>
+        {imageUrl && showCropper && (
+          <>
+            <Cropper
+              src={imageUrl}
+              style={{ height: 400, width: "100%" }}
+              aspectRatio={1 / 1}
+              guides={false}
+              ref={cropperRef}
+              rotatable={true}
+              modal={true}
+            />
+            <button onClick={crop} className="btn rounded-lg mt-5 mr-5">
+              Crop
+            </button>
+            <button onClick={rotate} className="btn rounded-lg mt-5">
+              Rotate
+            </button>
+          </>
+        )}
       </>
     </Card>
   );

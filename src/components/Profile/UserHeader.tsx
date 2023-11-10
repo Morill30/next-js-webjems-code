@@ -85,7 +85,7 @@ export default function ProfileHeader() {
             <Icons type="Google-Flat" />
             Send me a message
           </a>
-          {user.authUser && (
+          {user.authUser?.id === parseFloat(router.query.id as string) && (
             <Link
               className=" bg-slate-500 hover:bg-slate-400  w-fit p-2 rounded-lg text-white text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55"
               href="/user/edit-profile/"
