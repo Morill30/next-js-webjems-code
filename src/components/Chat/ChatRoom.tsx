@@ -186,7 +186,7 @@ export default function ChatRoom({
   }, [friendId]);
 
   return (
-    <div className=" bg-white h-[calc(100vh-56px)] md:h-[100vh] w-full max-w-full overflow-hidden flex flex-col items-center">
+    <div className=" bg-white h-[calc(100dvh-56px)] md:h-[100dvh] w-full max-w-full overflow-hidden flex flex-col items-center">
       <div className=" flex items-center gap-4 w-full bg-slate-200 p-4">
         <div className=" flex justify-center items-center rounded-full h-9 w-9 bg-green-600 text-white uppercase">
           {getChatName()?.[0]}
