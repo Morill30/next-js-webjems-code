@@ -185,6 +185,12 @@ export default function ChatRoom({
     }
   }, [friendId]);
 
+  useEffect(() => {
+    document.ontouchmove = function (event) {
+      event.preventDefault();
+    };
+  }, []);
+
   return (
     <div className=" bg-white h-[calc(100dvh-56px)] md:h-[100dvh] w-full max-w-full overflow-hidden flex flex-col items-center">
       <div className=" flex items-center gap-4 w-full bg-slate-200 p-4">
