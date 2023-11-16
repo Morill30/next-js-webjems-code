@@ -186,9 +186,7 @@ export default function ChatRoom({
   }, [friendId]);
 
   useEffect(() => {
-    document.ontouchmove = function (event) {
-      event.preventDefault();
-    };
+    document.documentElement.style.overscrollBehavior = "none";
   }, []);
 
   return (
