@@ -187,6 +187,12 @@ export default function ChatRoom({
 
   useEffect(() => {
     document.documentElement.style.overscrollBehavior = "none";
+    document.body.style.height = "100dvh";
+
+    return () => {
+      document.documentElement.style.overscrollBehavior = "auto";
+      document.body.style.height = "auto";
+    };
   }, []);
 
   return (
