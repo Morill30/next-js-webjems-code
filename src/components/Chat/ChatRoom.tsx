@@ -255,7 +255,7 @@ export default function ChatRoom({
           <div className="flex justify-center">Chat has not started yet!</div>
         )}
       </div>
-      <div className=" h-[86px] box-border flex justify-center p-5 bg-white shadow-inner w-full">
+      <div className=" h-[70px] box-border flex justify-center p-3 bg-white shadow-inner w-full">
         <input
           className=" rounded-lg w-full max-w-[400px] bg-slate-100 border-2 border-slate-200"
           type="text"
@@ -268,7 +268,7 @@ export default function ChatRoom({
         <button
           className={` ${
             !isConnected && " bg-slate-400"
-          } bg-slate-500 py-2 px-4 ml-2 rounded-lg text-white`}
+          } bg-slate-500 py-2 px-4 ml-2 rounded-lg text-white hidden md:block`}
           disabled={!isConnected}
           onClick={sendMessage}
         >
@@ -282,9 +282,6 @@ export default function ChatRoom({
           )}
         </div>
       </div>
-      <span className=" text-center pb-2 text-slate-800 font-thin">
-        Webjems Powered chat v0.0.2
-      </span>
       <SignInModal showModal={showModal} setShowModal={setShowModalRedirect} />
     </div>
   );
