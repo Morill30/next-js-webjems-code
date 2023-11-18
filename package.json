@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/fslightbox-react": "^1.7.0",
+    "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
