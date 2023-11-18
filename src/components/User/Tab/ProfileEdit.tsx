@@ -7,13 +7,14 @@ import Image from "next/image";
 import axios from "axios";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import { v4 as uuidv4 } from "uuid";
 
 export default function ProfileEditTab() {
   const { user, updateOnlineUser } = useUserContext();
   const { data: session, status }: SessionData = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageDidChange, setImageDidChange] = useState<boolean>(false);
-  const [imageFile, setImage] = useState<File | Blob | undefined | null>();
+  const [imageFile, setImage] = useState<File | undefined | null>();
   const [imageUrl, setImageUrl] = useState<string | null>("");
   const [showCropper, setShowCropper] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>("");
@@ -22,22 +23,19 @@ export default function ProfileEditTab() {
   const crop = () => {
     const cropper = cropperRef.current?.cropper;
     const croppedCanvas = cropper?.getCroppedCanvas();
-    const dataUrl = croppedCanvas?.toDataURL();
-    setImage(dataURLtoFile(dataUrl as string, imageFile?.name as string));
-    setShowCropper(false);
-  };
-
-  const dataURLtoFile = (dataurl: string, filename: string) => {
-    const arr = dataurl.split(",");
-    const mime = arr?.[0]?.match(/:(.*?);/)?.[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n) {
-      u8arr[n - 1] = bstr.charCodeAt(n - 1);
-      n -= 1; // to make eslint happy
-    }
-    return new File([u8arr], filename, { type: mime });
+    croppedCanvas?.toBlob(
+      (blob) => {
+        if (blob) {
+          const imageFileTemp = new File([blob], `${uuidv4() + ".jpg"}`, {
+            type: "image/jpeg",
+          });
+          setImage(imageFileTemp);
+          setShowCropper(false);
+        }
+      },
+      "image/jpeg",
+      0.95
+    );
   };
 
   const rotate = () => {
