@@ -47,5 +47,6 @@ The server will start a nginx container in port 80 and 443 with a domain of `loc
 
 ## ECS Fargate Setup
 
-![image](https://user-images.githubusercontent.com/55332150/223022818-6ef820e0-c730-40d7-b2da-1f0c3db0234c.png)
+Was recently set up in railway.com due to cost but here is the ECS Diagram if you need to spin somthing similar
 
+![image](https://user-images.githubusercontent.com/55332150/223022818-6ef820e0-c730-40d7-b2da-1f0c3db0234c.png)
