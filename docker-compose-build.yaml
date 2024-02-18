@@ -6,7 +6,7 @@ services:
       context: ./
       dockerfile: ./docker/node/Dockerfile
       target: runner
-    image: 028352660330.dkr.ecr.us-east-1.amazonaws.com/nextjs-psite:latest
+    image: //Removed for safety purposes/nextjs-psite:latest
     ports:
       - "3000:3000"
     platform: linux/amd64
@@ -16,5 +16,5 @@ services:
     build:
       dockerfile: docker/nginx/Dockerfile
       context: .
-    image: 028352660330.dkr.ecr.us-east-1.amazonaws.com/nginx-psite:latest
+    image: //Removed for safety purposes/nginx-psite:latest
     platform: linux/amd64

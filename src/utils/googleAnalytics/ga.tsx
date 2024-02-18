@@ -6,7 +6,7 @@ declare global {
 
 // log the pageview with their URL
 export const pageview = (url: string) => {
-  window?.gtag("config", "G-T55DNTQ7Z6", {
+  window?.gtag("config", "", {
     page_path: url,
   });
 };

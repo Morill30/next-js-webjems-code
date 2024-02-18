@@ -17,9 +17,8 @@ export const options = {
   session: { strategy: "jwt" },
 
   callbacks: {
-    async session({ session, token }: { session: Session; token: any }) {
-      session.jwt = token.jwt;
-      session.id = token.id;
+    async session({ session }: { session: Session }) {
+      //Removed for safety purposes
       return session;
     },
 
@@ -37,9 +36,7 @@ export const options = {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/auth/${account?.provider}/callback?access_token=${account?.access_token}`
         );
-        const data = await response.json();
-        token.jwt = data.jwt;
-        token.id = data.user.id;
+        //Removed for safety purposes
       }
       return token;
     },

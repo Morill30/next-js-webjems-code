@@ -33,14 +33,8 @@ export default async function handler(
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_API_URL
-        }/api/user-messages?populate=*&filters[socket_room][roomId]eq=${getSocketRoomId()}&sort=publishedAt:desc`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `bearer ${process.env.STRAPI_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
+        }/api/user-messages?populate=*&filters[socket_room][roomId]eq=${getSocketRoomId()}&sort=publishedAt:desc`
+        //Removed for safety purposes
       );
       const data = await response.text();
       const responseMessage = JSON.parse(data);

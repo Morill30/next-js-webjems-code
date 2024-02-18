@@ -118,12 +118,8 @@ export async function getServerSideProps({
   try {
     // Fetching data from an API
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/posts?populate=*`,
-      {
-        headers: {
-          Authorization: `bearer ${process.env.STRAPI_KEY}`,
-        },
-      }
+      `${process.env.NEXT_PUBLIC_API_URL}/api/posts?populate=*`
+      //Removed for safety purposes
     );
     const posts = await res.json();
     return { props: { posts, session } };

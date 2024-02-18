@@ -13,13 +13,6 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const session: Session | null = await getServerSession(req, res, options);
-  function connectionParam() {
-    if (req.query.disconnect !== undefined) {
-      return { disconnect: [session?.id] };
-    } else {
-      return { connect: [session?.id] };
-    }
-  }
 
   const postId = req.query.postId;
   console.log(connectionParam(), req.query.disconnect);
@@ -29,17 +22,7 @@ export default async function handler(
       `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`,
       {
         method: "PUT",
-        headers: {
-          Authorization: `bearer ${process.env.STRAPI_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: {
-            user_likes: {
-              ...connectionParam(),
-            },
-          },
-        }),
+        //Removed for safety purposes
       }
     );
     const data = await response.text();

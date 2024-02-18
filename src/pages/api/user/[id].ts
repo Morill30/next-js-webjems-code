@@ -20,14 +20,10 @@ export default async function handler(
   try {
     if (session) {
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/${id}`,
         method: req.method,
         params: req.method === "GET" ? req.query : null,
-        headers: {
-          Authorization: `bearer ${process.env.STRAPI_KEY}`,
-          "Content-Type": req.headers["content-type"],
-        },
-        data: req.method !== "GET" ? req.body : null,
+        //Removed for safety purposes
       });
 
       res.status(response?.status).json({

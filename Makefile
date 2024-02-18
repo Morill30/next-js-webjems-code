@@ -13,16 +13,16 @@ ssl-create:
 deploy-images: build-images ecr-login deploy-next deploy-nginx
 
 ecr-login:
-	@aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 028352660330.dkr.ecr.us-east-1.amazonaws.com
+	@aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin //Removed for safety purposes
 
 build-images:
 	@docker compose -f ./docker-compose-build.yaml build
 
 deploy-nginx:
-	@docker push 028352660330.dkr.ecr.us-east-1.amazonaws.com/nginx-psite:latest
+	@docker push //Removed for safety purposes/nginx-psite:latest
 
 deploy-next:
-	@docker push 028352660330.dkr.ecr.us-east-1.amazonaws.com/nextjs-psite:latest
+	@docker push //Removed for safety purposes/nextjs-psite:latest
 
 ecs-deploy:
 	@aws ecs update-service --cluster Personal-Website-Cluster --service personal-site-service --force-new-deployment

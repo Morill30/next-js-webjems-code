@@ -42,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-T55DNTQ7Z6"
+        src="https://www.googletagmanager.com/gtag/js?id="
         strategy="afterInteractive"
       />
       <Script id="google-analytics" strategy="afterInteractive">
@@ -51,7 +51,7 @@ export default function App({ Component, pageProps }: AppProps) {
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-T55DNTQ7Z6', {
+          gtag('config', '', {
               page_path: window.location.pathname,
           });
         `}

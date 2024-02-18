@@ -21,21 +21,6 @@ export default async function handler(
   const session: Session | null = await getServerSession(req, res, options);
 
   if (session) {
-    /*
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/user-messages/?sort=publishedAt:desc&populate=*`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `bearer ${process.env.STRAPI_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const data = await response.text();
-    const responseMessage = JSON.parse(data);
-    */
     const responseMessage = { error: 0, data: "Sorry This API is deprecated" };
     if (!responseMessage.error) {
       res.status(200).json(responseMessage);

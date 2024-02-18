@@ -42,7 +42,7 @@ export default function ChatRoom({
   }
 
   async function getOnlineMessages() {
-    const response = await fetch("/api/socket-rooms", {
+    const response = await fetch("/socketrooms", {
       method: "POST",
       body: JSON.stringify({
         groupChatName,
@@ -177,7 +177,7 @@ export default function ChatRoom({
 
   useEffect(() => {
     if (friendId) {
-      axios.get(`/api/user/${friendId}`).then((response) => {
+      axios.get(`/user/${friendId}`).then((response) => {
         if (response.data) {
           setFriendInfo(response.data?.data);
         }
