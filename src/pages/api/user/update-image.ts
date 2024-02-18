@@ -23,20 +23,10 @@ export default async function handler(
 
   try {
     if (session) {
-      // const responseDelete = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/upload/files/${req.headers['replace-asset-id']}`, {
-      //   headers: {
-      //     Authorization: `bearer ${process.env.STRAPI_KEY}`,
-      //   },
-      // });
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
-        req,
-        {
-          headers: {
-            Authorization: `bearer ${process.env.STRAPI_KEY}`,
-            "Content-Type": req.headers["content-type"],
-          },
-        }
+        req
+        //Removed for safety purposes
       );
 
       res.status(response?.status).json({
